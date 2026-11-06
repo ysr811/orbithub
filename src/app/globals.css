@@ -1,26 +1,140 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-cairo: var(--font-cairo), sans-serif;
+  --font-museo: var(--font-museo), sans-serif;
+
+  --color-brand-dark: #0E0F28;
+  --color-brand-surface: #26273E;
+  --color-brand-muted: #3E3F53;
+  --color-brand-light: #E4E5F2;
+  --color-brand-secondary: #7A89EA;
+  --color-brand-primary: #2A3EF4;
+
+  --color-c-dark: #0E0F28;
+  --color-c-navy: #26273E;
+  --color-c-slate: #3E3F53;
+  --color-c-light: #E4E5F2;
+  --color-c-lavender: #7A89EA;
+  --color-c-blue: #2A3EF4;
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F8F9FE;
+  --foreground: #0E0F28;
+  --surface: #FFFFFF;
+  --card: #FFFFFF;
+  --card-foreground: #0E0F28;
+  --popover: #FFFFFF;
+  --popover-foreground: #0E0F28;
+  --primary: #2A3EF4;
+  --primary-foreground: #FFFFFF;
+  --secondary: #E4E5F2;
+  --secondary-foreground: #0E0F28;
+  --muted: #E8EAF5;
+  --muted-foreground: #5B5F7D;
+  --accent: #EEF0F9;
+  --accent-foreground: #0E0F28;
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: #D8DAEB;
+  --input: #D8DAEB;
+  --ring: #2A3EF4;
+  --radius: 0.75rem;
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #0E0F28;
+  --sidebar-primary: #2A3EF4;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #EEF0F9;
+  --sidebar-accent-foreground: #0E0F28;
+  --sidebar-border: #D8DAEB;
+  --sidebar-ring: #2A3EF4;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --background: #0E0F28;
+  --foreground: #E4E5F2;
+  --surface: #26273E;
+  --card: #26273E;
+  --card-foreground: #E4E5F2;
+  --popover: #26273E;
+  --popover-foreground: #E4E5F2;
+  --primary: #2A3EF4;
+  --primary-foreground: #FFFFFF;
+  --secondary: #7A89EA;
+  --secondary-foreground: #0E0F28;
+  --muted: #3E3F53;
+  --muted-foreground: #E4E5F2;
+  --accent: #26273E;
+  --accent-foreground: #E4E5F2;
+  --border: #3E3F53;
+  --input: #3E3F53;
+  --ring: #2A3EF4;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-cairo), var(--font-museo), sans-serif;
+}
+
+.font-cairo, [dir="rtl"], [lang="ar"] {
+  font-family: var(--font-cairo), sans-serif;
+}
+
+.font-museo, [dir="ltr"], [lang="en"] {
+  font-family: var(--font-museo), sans-serif;
+}
+
+@theme inline {
+  --font-heading: var(--font-cairo);
+  --font-sans: var(--font-cairo);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
 }
