@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { ArrowRight, Clock, Tag } from "lucide-react";
+import { ArrowRight, Calendar } from "lucide-react";
 import MarkdownViewer from "@/components/MarkdownViewer";
 
 export default function DocArticleView({ doc, content }) {
@@ -16,16 +16,12 @@ export default function DocArticleView({ doc, content }) {
           <span>العودة للمقالات والأدلة</span>
         </Link>
 
-        <div className="flex items-center gap-3 text-xs text-muted-foreground">
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-primary/10 text-primary font-bold">
-            <Tag className="size-3" />
-            <span>{doc.tag}</span>
-          </span>
-          <span className="inline-flex items-center gap-1">
-            <Clock className="size-3" />
-            <span>{doc.readTime}</span>
-          </span>
-        </div>
+        {doc.lastUpdated && (
+          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <Calendar className="size-3.5 text-primary" />
+            <span>آخر تحديث: {doc.lastUpdated}</span>
+          </div>
+        )}
       </div>
 
       {/* ─── Rendered Markdown Content ───────────────────────────────── */}
