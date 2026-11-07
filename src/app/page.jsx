@@ -2,12 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/Header";
 import heroImage from "../../public/image.png";
+
 import {
   CalendarDays,
   BookOpen,
   Palette,
   Sparkles,
-  ArrowLeft,
+  ArrowUpLeft,
 } from "lucide-react";
 
 const shortcuts = [
@@ -67,38 +68,43 @@ export default function Home() {
       </section>
 
       <section className="mb-12">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 lg:gap-5">
           {shortcuts.map((item) => {
             const Icon = item.icon;
+            const isDisabled = !item.href;
+
             const CardContent = (
               <div
-                className={`flex flex-col items-center p-6 rounded-2xl 
-                           bg-card transition-all duration-200 h-full
-                           ${
-                             !item.href
-                               ? "opacity-60 cursor-not-allowed border-dashed"
-                               : "cursor-pointer hover:bg-c-light active:scale-9"
-                           }`}
+                className={`group relative flex flex-col justify-between p-5 rounded-2xl bg-card border-2 transition-all duration-200 h-full min-h-32.5 ${
+                  isDisabled
+                    ? "opacity-50 cursor-not-allowed border-dashed border-border"
+                    : "cursor-pointer border-border/60 hover:bg-c-light active:scale-[0.98]"
+                }`}
               >
-                <div>
-                  <div className="flex items-center mb-4">
-                    <div className="p-3 rounded-xl bg-accent text-primary group-hover:scale-110 transition-transform">
-                      <Icon className="size-6" />
-                    </div>
+                <div className="flex items-start justify-between w-full mb-6">
+                  <div
+                    className={`flex items-center justify-center size-10 rounded-xl bg-accent/70 text-primary transition-colors duration-200  ${!isDisabled && "group-hover:bg-primary group-hover:text-primary-foreground"}`}
+                  >
+                    <Icon className="size-5" />
                   </div>
-                  <h3 className="text-lg font-bold font-cairo text-foreground mb-1">
-                    {item.title}
-                  </h3>
+
+                  {!isDisabled && (
+                    <ArrowUpLeft className="size-4 text-muted-foreground/50 transition-all duration-200 group-hover:text-foreground group-hover:-translate-x-0.5 group-hover:-translate-y-0.5" />
+                  )}
                 </div>
+
+                <h3 className="text-base font-semibold font-cairo text-foreground tracking-tight">
+                  {item.title}
+                </h3>
               </div>
             );
 
-            if (!item.href) {
+            if (isDisabled) {
               return <div key={item.title}>{CardContent}</div>;
             }
 
             return (
-              <Link key={item.title} href={item.href} className="block">
+              <Link key={item.title} href={item.href} className="block h-full">
                 {CardContent}
               </Link>
             );
