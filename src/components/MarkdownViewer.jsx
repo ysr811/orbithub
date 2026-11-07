@@ -1,6 +1,8 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { MessageCircle } from "lucide-react";
+import ReindexButton from "@/components/ReindexButton";
 
 export default function MarkdownViewer({ content }) {
   return (
@@ -44,7 +46,7 @@ export default function MarkdownViewer({ content }) {
             </li>
           ),
           blockquote: ({ children }) => (
-            <blockquote className="border-r-4 border-primary bg-primary/5 py-3 px-4 rounded-l-xl my-5 text-sm sm:text-base text-foreground/90 font-medium leading-relaxed">
+            <blockquote className="bg-yellow-100/50 py-3 px-4 rounded-lg my-5 text-sm sm:text-base text-foreground/90 font-medium leading-relaxed">
               {children}
             </blockquote>
           ),
@@ -72,14 +74,14 @@ export default function MarkdownViewer({ content }) {
             );
           },
           table: ({ children }) => (
-            <div className="w-full overflow-x-auto my-6 rounded-2xl border border-border shadow-2xs bg-card">
-              <table className="w-full text-right text-xs sm:text-sm border-collapse">
+            <div className="w-full overflow-x-auto my-6 rounded-xl bg-card">
+              <table className="w-full text-right text-xs sm:text-sm">
                 {children}
               </table>
             </div>
           ),
           thead: ({ children }) => (
-            <thead className="bg-muted/70 text-foreground font-bold border-b border-border">
+            <thead className="bg-muted/70 text-foreground font-bold">
               {children}
             </thead>
           ),
@@ -101,16 +103,34 @@ export default function MarkdownViewer({ content }) {
           hr: () => (
             <hr className="border-border/60 my-8" />
           ),
-          a: ({ href, children }) => (
-            <a
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline font-semibold"
-            >
-              {children}
-            </a>
-          ),
+          a: ({ href, children }) => {
+            if (href === "#reindex") {
+              return <ReindexButton />;
+            }
+            if (href?.startsWith("https://wa.me")) {
+              return (
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 my-2 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs sm:text-sm transition-all no-underline cursor-pointer"
+                >
+                  <MessageCircle className="size-4 shrink-0" />
+                  <span>{children}</span>
+                </a>
+              );
+            }
+            return (
+              <a
+                href={href}
+                target={href?.startsWith("#") ? "_self" : "_blank"}
+                rel={href?.startsWith("#") ? undefined : "noopener noreferrer"}
+                className="text-primary hover:underline font-semibold"
+              >
+                {children}
+              </a>
+            );
+          },
         }}
       >
         {content}

@@ -1,3 +1,6 @@
+import fs from "fs";
+import path from "path";
+
 export const docsList = [
   {
     slug: "how-it-works",
@@ -21,4 +24,9 @@ export const docsList = [
 
 export function getDocBySlug(slug) {
   return docsList.find((item) => item.slug === slug);
+}
+
+export function getDocContent(fileName) {
+  const filePath = path.join(process.cwd(), "src/content/docs", fileName);
+  return fs.readFileSync(filePath, "utf-8");
 }

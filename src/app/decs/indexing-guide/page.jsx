@@ -1,6 +1,4 @@
-import fs from "fs/promises";
-import path from "path";
-import { getDocBySlug } from "@/data/docs";
+import { getDocBySlug, getDocContent } from "@/data/docs";
 import DocArticleView from "@/components/DocArticleView";
 
 const doc = getDocBySlug("indexing-guide");
@@ -10,9 +8,7 @@ export const metadata = {
   description: doc.description,
 };
 
-export default async function IndexingGuidePage() {
-  const filePath = path.join(process.cwd(), "src/content/docs", doc.fileName);
-  const content = await fs.readFile(filePath, "utf-8");
-
+export default function IndexingGuidePage() {
+  const content = getDocContent(doc.fileName);
   return <DocArticleView doc={doc} content={content} />;
 }
