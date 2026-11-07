@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
 
-// Load .env.local if present
+// Load environment variables from .env.local if present
 const envPath = path.resolve(process.cwd(), ".env.local");
 if (fs.existsSync(envPath)) {
   dotenv.config({ path: envPath });
@@ -17,12 +17,12 @@ const rootFolderId = process.env.GOOGLE_DRIVE_ROOT_FOLDER_ID;
 const secret = process.env.REVALIDATE_SECRET;
 
 console.log("\n==========================================");
-console.log("   OrbitHub - فحص وفهرسة Google Drive      ");
+console.log("     OrbitHub - Google Drive Indexer        ");
 console.log("==========================================\n");
 
 if (!clientEmail || !privateKey || !rootFolderId) {
-  console.error("❌ خطأ: المتغيرات البيئية غير مكتملة في .env.local");
-  console.error("تأكد من وجود: GOOGLE_CLIENT_EMAIL, GOOGLE_PRIVATE_KEY, GOOGLE_DRIVE_ROOT_FOLDER_ID");
+  console.error("Error: Missing credentials in .env.local");
+  console.error("Required variables: GOOGLE_CLIENT_EMAIL, GOOGLE_PRIVATE_KEY, GOOGLE_DRIVE_ROOT_FOLDER_ID");
   process.exit(1);
 }
 
@@ -47,15 +47,15 @@ async function listItems(parentId) {
 }
 
 async function runIndex() {
-  console.log(`📡 الاتصال بالحساب: ${clientEmail}`);
-  console.log(`📁 المجلد الرئيسي (Root ID): ${rootFolderId}\n`);
+  console.log(`Connected Service Account: ${clientEmail}`);
+  console.log(`Root Folder ID: ${rootFolderId}\n`);
 
   const rootItems = await listItems(rootFolderId);
   const rootFolders = rootItems.filter((i) => i.mimeType === "application/vnd.google-apps.folder");
   const rootFiles = rootItems.filter((i) => i.mimeType !== "application/vnd.google-apps.folder");
 
   if (rootFiles.length > 0) {
-    console.warn("⚠️ تنبيه: توجد ملفات في المجلد الرئيسي مباشرة (لن تظهر، يجب أن تكون داخل مجلد أستاذ):");
+    console.warn("Warning: Files found directly in root folder (will not be indexed; must be inside an instructor folder):");
     rootFiles.forEach((f) => console.warn(`   - ${f.name}`));
     console.log("");
   }
@@ -64,50 +64,50 @@ async function runIndex() {
   const tree = [];
 
   for (const levelFolder of rootFolders) {
-    console.log(`📂 [المستوى]: ${levelFolder.name}`);
+    console.log(`[Level]: ${levelFolder.name}`);
     const semesters = await listItems(levelFolder.id);
 
     const semFolders = semesters.filter((i) => i.mimeType === "application/vnd.google-apps.folder");
     const semFiles = semesters.filter((i) => i.mimeType !== "application/vnd.google-apps.folder");
 
     if (semFiles.length > 0) {
-      console.warn(`   ⚠️ ملفات مباشرة داخل ${levelFolder.name} (يجب أن تكون داخل ترم ثم مادة ثم أستاذ):`);
+      console.warn(`   Warning: Files placed directly in ${levelFolder.name} (must be in semester -> subject -> instructor):`);
       semFiles.forEach((f) => console.warn(`      - ${f.name}`));
     }
 
     for (const semFolder of semFolders) {
-      console.log(`   📁 [الترم]: ${semFolder.name}`);
+      console.log(`   [Semester]: ${semFolder.name}`);
       const subjects = await listItems(semFolder.id);
 
       const subjFolders = subjects.filter((i) => i.mimeType === "application/vnd.google-apps.folder");
       const subjFiles = subjects.filter((i) => i.mimeType !== "application/vnd.google-apps.folder");
 
       if (subjFiles.length > 0) {
-        console.warn(`      ⚠️ ملفات مباشرة داخل ${semFolder.name} (يجب أن تكون داخل مادة ثم أستاذ):`);
+        console.warn(`      Warning: Files placed directly in ${semFolder.name} (must be in subject -> instructor):`);
         subjFiles.forEach((f) => console.warn(`         - ${f.name}`));
       }
 
       for (const subjFolder of subjFolders) {
-        console.log(`      📁 [المادة]: ${subjFolder.name}`);
+        console.log(`      [Subject]: ${subjFolder.name}`);
         const instructors = await listItems(subjFolder.id);
 
         const instFolders = instructors.filter((i) => i.mimeType === "application/vnd.google-apps.folder");
         const instFiles = instructors.filter((i) => i.mimeType !== "application/vnd.google-apps.folder");
 
         if (instFiles.length > 0) {
-          console.warn(`         ⚠️ ملفات مباشرة داخل ${subjFolder.name} (يجب أن تكون داخل مجلد أستاذ):`);
+          console.warn(`         Warning: Files placed directly in ${subjFolder.name} (must be inside an instructor folder):`);
           instFiles.forEach((f) => console.warn(`            - ${f.name}`));
         }
 
         for (const instFolder of instFolders) {
-          console.log(`         👤 [الأستاذ]: ${instFolder.name}`);
+          console.log(`         [Instructor]: ${instFolder.name}`);
           const files = await listItems(instFolder.id);
 
           for (const file of files) {
             if (file.mimeType !== "application/vnd.google-apps.folder") {
               totalFiles++;
               const sizeMB = file.size ? (Number(file.size) / (1024 * 1024)).toFixed(2) : "0";
-              console.log(`            📄 ${file.name} (${sizeMB} MB)`);
+              console.log(`            [File] ${file.name} (${sizeMB} MB)`);
               tree.push({
                 level: levelFolder.name,
                 semester: semFolder.name,
@@ -123,24 +123,24 @@ async function runIndex() {
   }
 
   console.log("\n==========================================");
-  console.log(`✅ إجمالي الملازم الصالحة المفهرسة: ${totalFiles} ملزمة`);
+  console.log(`Total valid files indexed: ${totalFiles}`);
   console.log("==========================================\n");
 
-  // Trigger revalidation if server is reachable
+  // Trigger on-demand cache revalidation if server is reachable
   const targetUrl = process.argv[2] || process.env.SITE_URL || "http://localhost:3000";
   if (secret) {
     try {
       const res = await fetch(`${targetUrl.replace(/\/$/, "")}/api/revalidate?secret=${secret}`);
       if (res.ok) {
-        console.log(`🔄 تم إرسال أمر إعادة التحقق بنجاح إلى (${targetUrl})! تم تحديث الكاش.`);
+        console.log(`Revalidation signal successfully sent to (${targetUrl}) - Cache refreshed.`);
       }
     } catch {
-      // Server might not be running right now, which is normal
+      // Server might not be running locally, which is expected
     }
   }
 }
 
 runIndex().catch((err) => {
-  console.error("❌ حدث خطأ أثناء الفهرسة:", err);
+  console.error("Error during indexing:", err?.message || err);
   process.exit(1);
 });
