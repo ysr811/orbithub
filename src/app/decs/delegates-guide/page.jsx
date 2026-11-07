@@ -6,7 +6,7 @@ import DocArticleView from "@/components/DocArticleView";
 const doc = getDocBySlug("delegates-guide");
 
 export const metadata = {
-  title: `${doc.title} | OrbitHub`,
+  title: "دليل مندوبي الدفعات الأكاديمية | OrbitHub",
   description: doc.description,
 };
 

@@ -22,9 +22,6 @@ export default function DecsOverviewPage() {
               <div className="flex flex-col gap-4">
                 {/* Title & Description */}
                 <div className="flex flex-col gap-2">
-                  <h2 className="text-base sm:text-lg font-bold text-foreground group-hover:text-primary transition-colors leading-snug">
-                    {doc.title}
-                  </h2>
                   <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed line-clamp-3">
                     {doc.description}
                   </p>

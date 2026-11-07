@@ -6,7 +6,7 @@ import DocArticleView from "@/components/DocArticleView";
 const doc = getDocBySlug("indexing-guide");
 
 export const metadata = {
-  title: `${doc.title} | OrbitHub`,
+  title: "دليل فهرسة وتنظيم Google Drive | OrbitHub",
   description: doc.description,
 };
 
