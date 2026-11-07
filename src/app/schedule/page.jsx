@@ -6,7 +6,7 @@ export default function SchedulePage() {
     <EmptyStatePage
       icon={FileQuestionMark}
       title="الجدول الأكاديمي"
-      description="قريباً - الجدول والمواعيد الدراسية لدفعة Orbit."
+      description="قريباً - الجدول والمواعيد الدراسية لطلاب علوم الحاسوب في جامعة حضرموت."
     />
   );
 }

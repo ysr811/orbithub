@@ -42,12 +42,9 @@ export default function Home() {
         className="relative w-full h-fit lg:min-h-screen bg-background overflow-hidden flex items-start justify-center pt-4 lg:pt-20 pb-6"
       >
         <div className="relative z-10 w-full mx-auto flex flex-col items-center justify-center">
-          <div className="max-w-xl h-[35dvh] max-h-96 min-h-fit flex items-center justify-center">
-            <p>
-              Orbit Hub هي منصة صُممت خصيصاً لطلاب دفعة Orbit (علوم الحاسوب)
-              لتسهيل دراستنا وتنظيمها. يجمع الموقع كل ما نحتاجه في مكان واحد، من
-              محاضرات وملخصات وجداول دراسية، إلى جانب متابعة آخر أخبار وتنبيهات
-              الدفعة أولاً بأول بواجهة بسيطة وسريعة.
+          <div className="max-w-xl h-[35dvh] max-h-96 min-h-fit flex items-center justify-center text-center px-4">
+            <p className="text-sm sm:text-base leading-relaxed text-foreground/80 font-cairo">
+              منصة <strong className="font-bold text-foreground">Orbit Hub</strong> صُممت لتكون المرجع الأكاديمي الشامل لجميع طلاب <strong className="font-bold text-primary">علوم الحاسوب في جامعة حضرموت</strong> لتسهيل مسيرتنا الجامعية وتنظيمها. يجمع الموقع كل ما يحتاجه الطلاب في مكان واحد، من محاضرات وملخصات وملازم معتمدة وجداول دراسية، إلى جانب متابعة آخر الأخبار والتنبيهات أولاً بأول بواجهة بسيطة وسريعة.
             </p>
           </div>
           <Image
@@ -67,7 +64,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mb-12">
+      {/* <section className="mb-12">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
           {shortcuts.map((item) => {
             const Icon = item.icon;
@@ -105,7 +102,7 @@ export default function Home() {
             );
           })}
         </div>
-      </section>
+      </section> */}
     </>
   );
 }
