@@ -10,6 +10,7 @@ const navLinks = [
   { name: "الرئيسية", href: "/" },
   { name: "الجدول", href: "/schedule" },
   { name: "الملازم", href: "/materials" },
+  { name: "المقالات", href: "/articles" },
   { name: "الهوية", href: "/brand" },
 ];
 
