@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
-import Section from "@/components/Section";
-import SnapScroll from "@/components/SnapScroll";
+import Section from "@/components/brand/Section";
+import SnapScroll from "@/components/brand/SnapScroll";
 
 const brandSections = [
   {

@@ -1,5 +1,5 @@
 import { getDocBySlug, getDocContent } from "@/data/docs";
-import DocArticleView from "@/components/DocArticleView";
+import DocArticleView from "@/components/docs/DocArticleView";
 
 const doc = getDocBySlug("how-it-works");
 

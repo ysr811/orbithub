@@ -1,8 +1,8 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowRight, ArrowLeft } from "lucide-react";
-import MarkdownViewer from "@/components/MarkdownViewer";
-import ArticleBanner from "@/components/ArticleBanner";
+import MarkdownViewer from "@/components/docs/MarkdownViewer";
+import ArticleBanner from "@/components/docs/ArticleBanner";
 
 export default function DocArticleView({ doc, content }) {
   return (

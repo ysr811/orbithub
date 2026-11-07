@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import { getSummaries } from "@/lib/drive";
-import MaterialsClient from "@/components/MaterialsClient";
+import MaterialsClient from "@/components/materials/MaterialsClient";
 import MaterialSkeleton from "@/components/materials/MaterialSkeleton";
 import MaterialEmptyState from "@/components/materials/MaterialEmptyState";
 import { Suspense } from "react";

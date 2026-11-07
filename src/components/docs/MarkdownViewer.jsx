@@ -2,7 +2,7 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { MessageCircle } from "lucide-react";
-import ReindexButton from "@/components/ReindexButton";
+import ReindexButton from "@/components/docs/ReindexButton";
 
 export default function MarkdownViewer({ content }) {
   return (
