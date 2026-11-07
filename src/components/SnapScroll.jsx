@@ -13,12 +13,14 @@ export default function SnapScroll({
   align = "start",
   selector,
   className,
+  minWidth = 768,
 }) {
   const lenis = useLenis();
   const containerRef = useRef(null);
 
   useEffect(() => {
     if (!enabled || !lenis || !containerRef.current) return;
+    if (window.innerWidth < minWidth) return;
 
     const snap = new Snap(lenis, {
       type,
@@ -37,7 +39,7 @@ export default function SnapScroll({
     return () => {
       snap.destroy();
     };
-  }, [enabled, lenis, type, duration, debounce, align, selector]);
+  }, [enabled, lenis, type, duration, debounce, align, selector, minWidth]);
 
   return (
     <div ref={containerRef} className={className}>

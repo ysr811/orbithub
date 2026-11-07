@@ -23,6 +23,10 @@
 # misc
 .DS_Store
 *.pem
+grand-mile-*.json
+*-serviceaccount*.json
+.agents/
+
 
 # debug
 npm-debug.log*
