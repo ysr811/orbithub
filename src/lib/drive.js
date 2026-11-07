@@ -127,7 +127,14 @@ async function crawlDrive() {
 
 // ─── Server Cache (1 Hour TTL with 'summaries' Tag) ──────────────────
 export const getSummaries = unstable_cache(
-  async () => crawlDrive(),
+  async () => {
+    try {
+      return await crawlDrive();
+    } catch (error) {
+      console.error("Error fetching Google Drive summaries:", error?.message || error);
+      return [];
+    }
+  },
   ["orbithub-summaries-v2"],
   {
     revalidate: 3600,
