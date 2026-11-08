@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/Header";
+import OnboardingModal from "@/components/OnboardingModal";
 import heroImage from "../../public/image.png";
 
 import {
@@ -111,6 +112,8 @@ export default function Home() {
           })}
         </div>
       </section>
+
+      <OnboardingModal />
     </>
   );
 }

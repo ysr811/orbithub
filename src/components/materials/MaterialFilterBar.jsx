@@ -58,14 +58,8 @@ export default function MaterialFilterBar({
           className="h-11 px-3.5 sm:px-4 gap-2 font-semibold rounded-xl border-border bg-card hover:bg-muted text-foreground cursor-pointer shrink-0 transition-colors"
           aria-label="فتح خيارات التصفية"
         >
-          <Funnel className="size-4 text-primary"/>
-          {/* <SlidersHorizontal  /> */}
-          <span className="font-cairo text-xs sm:text-sm hidden lg:block">فلتر</span>
-          {activeFilterCount > 0 && (
-            <span className="inline-flex items-center justify-center rounded-full bg-primary text-white text-[11px] font-bold size-5 mr-0.5">
-              {activeFilterCount}
-            </span>
-          )}
+          <Funnel className="size-4 text-primary" />
+          <span className="font-cairo text-xs sm:text-sm">فلتر</span>
         </Button>
       </div>
     </div>

@@ -4,7 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, SlidersHorizontal } from "lucide-react";
+import PreferencesModal from "@/components/PreferencesModal";
 
 const navLinks = [
   { name: "الرئيسية", href: "/" },
@@ -16,11 +17,12 @@ const navLinks = [
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isPreferencesOpen, setIsPreferencesOpen] = useState(false);
 
   return (
     <header dir="rtl" className="relative z-50">
       <div className="relative h-16 sm:h-20 flex items-center justify-between gap-4">
-        {/* الشعار */}
+        {/* Logo */}
         <Link href="/" className="flex items-center">
           <Image
             src="/logo/text-logo-hub.svg"
@@ -40,7 +42,7 @@ export default function Header() {
           />
         </Link>
 
-        {/* روابط التنقل - للشاشات المتوسطة والكبيرة */}
+        {/* Navigation Links - Medium & Large Screens */}
         <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-8 text-sm font-cairo text-foreground/80">
           {navLinks.map((link) => (
             <Link
@@ -54,6 +56,18 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-2 sm:gap-3">
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-sm"
+            onClick={() => setIsPreferencesOpen(true)}
+            title="تحديد أو تغيير مستواك الدراسي"
+            aria-label="تحديد أو تغيير مستواك الدراسي"
+            className="text-muted-foreground hover:text-foreground rounded-xl"
+          >
+            <SlidersHorizontal className="size-4" />
+          </Button>
+
           <Button render={<Link href="/schedule" />} size="sm">
             فتح الجدول
           </Button>
@@ -83,6 +97,13 @@ export default function Header() {
           ))}
         </div>
       )}
+
+      {/* Quick Level & Semester Preferences Modal */}
+      <PreferencesModal
+        isOpen={isPreferencesOpen}
+        onOpenChange={setIsPreferencesOpen}
+        initialStep={2}
+      />
     </header>
   );
 }

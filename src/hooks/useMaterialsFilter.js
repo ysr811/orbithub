@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo, useDeferredValue, useCallback } from "react";
+import { useState, useMemo, useDeferredValue, useCallback, useEffect } from "react";
+import { getUserPreferences } from "@/lib/userPreferences";
 
 const INITIAL_FILTERS = {
   level: "",
@@ -14,6 +15,24 @@ export function useMaterialsFilter(summaries = []) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isFiltersOpen, setIsFiltersOpen] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  // Initialize and synchronize filters with user's saved preferences
+  useEffect(() => {
+    const applySaved = () => {
+      const { level, semester } = getUserPreferences();
+      if (level || semester) {
+        setFilters((prev) => ({
+          ...prev,
+          level: level ? String(level) : prev.level,
+          semester: semester ? String(semester) : prev.semester,
+        }));
+      }
+    };
+
+    applySaved();
+    window.addEventListener("preferences_updated", applySaved);
+    return () => window.removeEventListener("preferences_updated", applySaved);
+  }, []);
 
   // useDeferredValue keeps the typing input responsive (60fps) by deferring list re-filtering
   const deferredSearch = useDeferredValue(searchQuery.trim().toLowerCase());
