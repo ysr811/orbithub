@@ -28,6 +28,7 @@ export default function MaterialsClient({ summaries = [] }) {
     activeFilterCount,
     hasActiveFilters,
     isSearching,
+    savedPreferences,
   } = useMaterialsFilter(summaries);
 
   // Active filters human-readable labels for the empty state
@@ -77,6 +78,7 @@ export default function MaterialsClient({ summaries = [] }) {
         searchQuery={searchQuery}
         onClearFilter={clearFilter}
         onResetAll={resetAll}
+        savedPreferences={savedPreferences}
       />
 
       {/* ─── Filter Drawer ──────────────────────────────────────────── */}
@@ -90,9 +92,8 @@ export default function MaterialsClient({ summaries = [] }) {
         setInstructor={setInstructor}
         resetAll={resetAll}
         options={options}
-        filteredCount={filteredSummaries.length}
-        totalCount={totalCount}
         activeFilterCount={activeFilterCount}
+        savedPreferences={savedPreferences}
       />
 
       {/* ─── Materials Grid or Empty State ──────────────────────────── */}

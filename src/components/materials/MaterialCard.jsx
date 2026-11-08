@@ -4,7 +4,6 @@ import {
   FileSpreadsheet,
   FileImage,
   File,
-  Eye,
   Download,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -82,8 +81,8 @@ export default function MaterialCard({ file }) {
   const displayTitle = cleanFileTitle(file.title);
 
   return (
-    <div className="group relative flex flex-col justify-between rounded-xl border border-border bg-card p-3 lg:p-5 text-foreground font-cairo cursor-pointer">
-      {/* ─── Stretched link covering the whole card for preview ────────── */}
+    <div className="group relative flex flex-col justify-between rounded-xl border border-border bg-card p-3 lg:p-5 text-foreground font-cairo cursor-pointer hover:border-primary/40 hover:shadow-xs transition-all duration-150">
+      {/* Stretched link covering the entire card to trigger preview on click */}
       <a
         href={file.viewUrl}
         target="_blank"
@@ -92,7 +91,7 @@ export default function MaterialCard({ file }) {
         aria-label={`معاينة ${displayTitle}`}
       />
 
-      {/* ─── Card Content (clicks pass through to stretched link) ─────── */}
+      {/* Card Content (clicks pass through to stretched link) */}
       <div className="relative z-1 pointer-events-none">
         <div className="flex items-start justify-between gap-3">
           <div
@@ -139,8 +138,8 @@ export default function MaterialCard({ file }) {
         </div>
       </div>
 
-      {/* ─── Action Buttons (elevated z-index to handle download independently) ─ */}
-      <div className="relative z-10 flex items-center gap-2 pt-4">
+      {/* Download Action (elevated z-index to handle independently from card click) */}
+      <div className="relative z-10 pt-4">
         <Button
           render={
             <a
@@ -151,22 +150,10 @@ export default function MaterialCard({ file }) {
           }
           variant="default"
           size="sm"
-          className="h-9 flex-1 cursor-pointer gap-1.5 rounded-lg bg-primary text-xs font-semibold text-primary-foreground shadow-none transition-colors hover:bg-primary/90"
+          className="h-9 w-full cursor-pointer gap-1.5 rounded-lg bg-primary text-xs font-semibold text-primary-foreground shadow-none transition-colors hover:bg-primary/90"
         >
           <Download className="size-3.5" />
           تحميل
-        </Button>
-
-        <Button
-          render={
-            <a href={file.viewUrl} target="_blank" rel="noopener noreferrer" />
-          }
-          variant="outline"
-          size="sm"
-          title="معاينة"
-          className="size-9 shrink-0 cursor-pointer rounded-lg border-border bg-transparent p-0 text-muted-foreground shadow-none transition-colors hover:bg-muted hover:text-foreground hidden lg:flex"
-        >
-          <Eye className="size-4" />
         </Button>
       </div>
     </div>

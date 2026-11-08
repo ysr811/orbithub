@@ -68,7 +68,7 @@ export default function Header() {
             <SlidersHorizontal className="size-4" />
           </Button>
 
-          <Button render={<Link href="/schedule" />} size="sm">
+          <Button className="hidden lg:flex" render={<Link href="/schedule" />} size="sm">
             فتح الجدول
           </Button>
 

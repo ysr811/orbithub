@@ -96,9 +96,17 @@ export default function PreferencesModal({
   };
 
   const handleSave = () => {
+    if (!level || !semester) return;
     setUserPreferences({ level, semester });
     setOnboardingCompleted(true);
     setIsOpen(false);
+  };
+
+  const isStep2Valid = Boolean(level && semester);
+
+  const handleNextFromStep2 = () => {
+    if (!isStep2Valid) return;
+    setStep(3);
   };
 
   if (!isOpen) return null;
@@ -125,7 +133,7 @@ export default function PreferencesModal({
             <div className="flex flex-col p-6 sm:p-8 md:p-9 gap-5 sm:gap-6">
               <DialogHeader className="gap-2 text-right">
                 <DialogTitle className="text-xl sm:text-2xl font-bold tracking-tight text-foreground leading-snug">
-                  أهلاً بك في Orbit Hub
+                  أهلاً بك
                 </DialogTitle>
                 <DialogDescription className="text-sm sm:text-base text-muted-foreground leading-relaxed pt-1">
                   جمعنا لك كل ما تحتاجه لمسيرتك الدراسية في مكان واحد — من مقررات، ملازم، وجداول صُممت لتنير طريقك وتختصر جهدك. كل خطوة تخطوها هنا تقربك خطوة نحو طموحك في عالم التقنية والبرمجة. ابدأ رحلتك بثقة وشغف، فالتميز حليفك!
@@ -161,7 +169,7 @@ export default function PreferencesModal({
           <div className="flex flex-col p-6 sm:p-8 md:p-9 gap-5 sm:gap-6">
             <DialogHeader className="gap-2 text-right">
               <DialogTitle className="text-xl sm:text-2xl font-bold tracking-tight text-foreground leading-snug">
-                حدد مستواك الدراسي
+                حدد مستواك
               </DialogTitle>
               <DialogDescription className="text-sm sm:text-base text-muted-foreground leading-relaxed pt-1">
                 اختر مستواك والترم الحالي لتخصيص المنصة وتجهيز مقرراتك وملازمك تلقائياً عند زيارة الموقع.
@@ -191,9 +199,10 @@ export default function PreferencesModal({
                 <>
                   <Button
                     type="button"
-                    onClick={() => setStep(3)}
+                    onClick={handleNextFromStep2}
+                    disabled={!isStep2Valid}
                     size="sm"
-                    className="h-9 px-6 font-bold text-xs sm:text-sm cursor-pointer"
+                    className="h-9 px-6 font-bold text-xs sm:text-sm cursor-pointer disabled:cursor-not-allowed"
                   >
                     التالي
                   </Button>
@@ -213,8 +222,9 @@ export default function PreferencesModal({
                   <Button
                     type="button"
                     onClick={handleSave}
+                    disabled={!isStep2Valid}
                     size="sm"
-                    className="h-9 px-6 font-bold text-xs sm:text-sm cursor-pointer"
+                    className="h-9 px-6 font-bold text-xs sm:text-sm cursor-pointer disabled:cursor-not-allowed"
                   >
                     تأكيد
                   </Button>
@@ -236,10 +246,10 @@ export default function PreferencesModal({
 
         {step === 3 && (
           /* ─── Step 3: Encouragement & Ambition (Wishes of Success) ──── */
-          <div className="flex flex-col p-6 sm:p-8 md:p-9 gap-5 sm:gap-6">
+          <div className="flex flex-col p-6 sm:p-8 md:p-9 gap-5 sm:gap-6 pt-16">
             <DialogHeader className="gap-2 text-right">
               <DialogTitle className="text-xl sm:text-2xl font-bold tracking-tight text-foreground leading-snug">
-                نتمنى لك رحلة حافلة بالنجاح والتفوق
+                انطلق في رحلة نجاحك
               </DialogTitle>
               <DialogDescription className="text-sm sm:text-base text-muted-foreground leading-relaxed pt-1">
                 أنت الآن جاهز تماماً للانطلاق! نتمنى لك مسيرة دراسية ممتلئة بالإنجازات والعلامات العالية، وأن تكون هذه الخطوة بداية لقصة نجاح باهرة تصنعها بيدك. تذكر دائماً أن شغفك وجهدك هما سر تفوقك، ونحن معك في كل خطوة نحو القمة.
@@ -253,7 +263,7 @@ export default function PreferencesModal({
                 size="sm"
                 className="h-9 px-6 font-bold text-xs sm:text-sm cursor-pointer"
               >
-                ابدأ التصفح
+                ابدأ
               </Button>
 
               <Button

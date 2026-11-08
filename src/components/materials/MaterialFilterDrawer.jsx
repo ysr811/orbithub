@@ -22,11 +22,15 @@ export default function MaterialFilterDrawer({
   resetAll,
   options,
   activeFilterCount,
+  savedPreferences = { level: "", semester: "" },
 }) {
   const availableLevels =
     options?.levels?.length > 0 ? options.levels : [1, 2, 3, 4];
   const availableSemesters =
     options?.semesters?.length > 0 ? options.semesters : [1, 2];
+
+  const hasSavedLevel = Boolean(savedPreferences?.level);
+  const hasSavedSemester = Boolean(savedPreferences?.semester);
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -71,33 +75,37 @@ export default function MaterialFilterDrawer({
             ]}
           />
 
-          {/* 3. Semester */}
-          <SelectField
-            label="الترم الدراسي"
-            value={filters.semester}
-            onChange={setSemester}
-            options={[
-              { value: "", label: "جميع الفصول الدراسية" },
-              ...availableSemesters.map((sem) => ({
-                value: String(sem),
-                label: `الترم ${sem}`,
-              })),
-            ]}
-          />
+          {/* 3. Semester (hidden when saved in user preferences) */}
+          {!hasSavedSemester && (
+            <SelectField
+              label="الترم الدراسي"
+              value={filters.semester}
+              onChange={setSemester}
+              options={[
+                { value: "", label: "جميع الفصول الدراسية" },
+                ...availableSemesters.map((sem) => ({
+                  value: String(sem),
+                  label: `الترم ${sem}`,
+                })),
+              ]}
+            />
+          )}
 
-          {/* 4. Academic Level */}
-          <SelectField
-            label="المستوى الدراسي"
-            value={filters.level}
-            onChange={setLevel}
-            options={[
-              { value: "", label: "جميع المستويات" },
-              ...availableLevels.map((lvl) => ({
-                value: String(lvl),
-                label: `المستوى ${lvl}`,
-              })),
-            ]}
-          />
+          {/* 4. Academic Level (hidden when saved in user preferences) */}
+          {!hasSavedLevel && (
+            <SelectField
+              label="المستوى الدراسي"
+              value={filters.level}
+              onChange={setLevel}
+              options={[
+                { value: "", label: "جميع المستويات" },
+                ...availableLevels.map((lvl) => ({
+                  value: String(lvl),
+                  label: `المستوى ${lvl}`,
+                })),
+              ]}
+            />
+          )}
         </div>
 
         {/* Footer Actions */}

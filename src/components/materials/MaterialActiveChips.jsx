@@ -7,10 +7,15 @@ export default function MaterialActiveChips({
   searchQuery,
   onClearFilter,
   onResetAll,
+  savedPreferences = { level: "", semester: "" },
 }) {
   const chips = [];
 
-  if (filters?.level) {
+  const hasSavedLevel = Boolean(savedPreferences?.level);
+  const hasSavedSemester = Boolean(savedPreferences?.semester);
+
+  // Only display level chip if it is not already saved as a default background preference
+  if (filters?.level && !hasSavedLevel) {
     chips.push({
       id: "level",
       key: "level",
@@ -20,7 +25,8 @@ export default function MaterialActiveChips({
     });
   }
 
-  if (filters?.semester) {
+  // Only display semester chip if it is not already saved as a default background preference
+  if (filters?.semester && !hasSavedSemester) {
     chips.push({
       id: "semester",
       key: "semester",
@@ -45,7 +51,7 @@ export default function MaterialActiveChips({
       id: "instructor",
       key: "instructor",
       icon: GraduationCap,
-      label: `الأستاذ: ${filters.instructor}`,
+      label: `${filters.instructor}`,
       ariaLabel: `إزالة فلتر الأستاذ ${filters.instructor}`,
     });
   }
@@ -70,10 +76,6 @@ export default function MaterialActiveChips({
       aria-label="الفلاتر المطبقة حالياً"
       className="flex flex-wrap items-center gap-2 pt-0.5 font-cairo"
     >
-      <span className="text-xs font-semibold text-muted-foreground shrink-0">
-        الفلاتر النشطة ({chips.length}):
-      </span>
-
       {chips.map((chip) => {
         const Icon = chip.icon;
         return (

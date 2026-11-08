@@ -12,21 +12,23 @@ const INITIAL_FILTERS = {
 
 export function useMaterialsFilter(summaries = []) {
   const [filters, setFilters] = useState(INITIAL_FILTERS);
+  const [savedPreferences, setSavedPreferences] = useState({ level: "", semester: "" });
   const [searchQuery, setSearchQuery] = useState("");
   const [isFiltersOpen, setIsFiltersOpen] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  // Initialize and synchronize filters with user's saved preferences
+  // Synchronize filters with user's saved preferences
   useEffect(() => {
     const applySaved = () => {
       const { level, semester } = getUserPreferences();
-      if (level || semester) {
-        setFilters((prev) => ({
-          ...prev,
-          level: level ? String(level) : prev.level,
-          semester: semester ? String(semester) : prev.semester,
-        }));
-      }
+      const cleanLevel = level ? String(level) : "";
+      const cleanSemester = semester ? String(semester) : "";
+      setSavedPreferences({ level: cleanLevel, semester: cleanSemester });
+      setFilters((prev) => ({
+        ...prev,
+        level: cleanLevel || prev.level,
+        semester: cleanSemester || prev.semester,
+      }));
     };
 
     applySaved();
@@ -34,12 +36,18 @@ export function useMaterialsFilter(summaries = []) {
     return () => window.removeEventListener("preferences_updated", applySaved);
   }, []);
 
-  // useDeferredValue keeps the typing input responsive (60fps) by deferring list re-filtering
+  // Responsive search query with deferred value for performance
   const deferredSearch = useDeferredValue(searchQuery.trim().toLowerCase());
 
-  // ─── Filter Updaters with Auto-Reset for Dependent Cascading Filters ──
+  // Filter setters
   const setLevel = useCallback((level) => {
-    setFilters({ level: level ? String(level) : "", semester: "", subject: "", instructor: "" });
+    setFilters((prev) => ({
+      ...prev,
+      level: level ? String(level) : "",
+      semester: "",
+      subject: "",
+      instructor: "",
+    }));
   }, []);
 
   const setSemester = useCallback((semester) => {
@@ -80,12 +88,18 @@ export function useMaterialsFilter(summaries = []) {
     }
   }, [setLevel, setSemester, setSubject, setInstructor]);
 
+  // Reset transient filters back to default saved preferences
   const resetAll = useCallback(() => {
-    setFilters(INITIAL_FILTERS);
+    setFilters({
+      level: savedPreferences.level || "",
+      semester: savedPreferences.semester || "",
+      subject: "",
+      instructor: "",
+    });
     setSearchQuery("");
-  }, []);
+  }, [savedPreferences]);
 
-  // ─── Derived Options for Dropdowns (Cascading Tree Hierarchy) ────────
+  // Derived options for dropdowns based on current scope
   const options = useMemo(() => {
     const levels = [...new Set(summaries.map((s) => s.level))]
       .filter(Boolean)
@@ -118,7 +132,7 @@ export function useMaterialsFilter(summaries = []) {
     return { levels, semesters, subjects, instructors };
   }, [summaries, filters.level, filters.semester, filters.subject]);
 
-  // ─── Final Filtered Materials List ──────────────────────────────────
+  // Filtered materials
   const filteredSummaries = useMemo(() => {
     return summaries.filter((item) => {
       if (filters.level && item.level !== Number(filters.level)) return false;
@@ -137,15 +151,16 @@ export function useMaterialsFilter(summaries = []) {
     });
   }, [summaries, filters, deferredSearch]);
 
+  // Active filter count (counts user-applied transient filters)
   const activeFilterCount = useMemo(() => {
     let count = 0;
-    if (filters.level) count += 1;
-    if (filters.semester) count += 1;
+    if (filters.level && !savedPreferences.level) count += 1;
+    if (filters.semester && !savedPreferences.semester) count += 1;
     if (filters.subject) count += 1;
     if (filters.instructor) count += 1;
     if (searchQuery.trim()) count += 1;
     return count;
-  }, [filters, searchQuery]);
+  }, [filters, searchQuery, savedPreferences]);
 
   const hasActiveFilters = activeFilterCount > 0;
 
@@ -169,5 +184,6 @@ export function useMaterialsFilter(summaries = []) {
     activeFilterCount,
     hasActiveFilters,
     isSearching: searchQuery.trim().toLowerCase() !== deferredSearch,
+    savedPreferences,
   };
 }
