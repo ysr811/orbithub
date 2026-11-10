@@ -42,7 +42,7 @@ export default function MaterialFilterDrawer({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[calc(100%-3rem)] sm:w-full sm:max-w-xl md:max-w-2xl p-6 sm:p-8 md:p-9 bg-card border-border rounded-3xl font-cairo shadow-2xl flex flex-col gap-5 sm:gap-6">
+      <DialogContent className="w-[calc(100%-3rem)] sm:w-full sm:max-w-xl md:max-w-2xl p-6 sm:p-8 md:p-9 bg-white border-none shadow-none rounded-3xl font-cairo flex flex-col gap-5 sm:gap-6">
         {/* Header */}
         <DialogHeader className="gap-2 text-right">
           <div className="flex items-center gap-2.5">

@@ -65,7 +65,7 @@ export default function Header() {
           })}
         </nav>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-3 md:gap-2">
           <Button
             type="button"
             variant="outline"
@@ -73,9 +73,9 @@ export default function Header() {
             onClick={() => setIsPreferencesOpen(true)}
             title="تحديد أو تغيير مستواك الدراسي"
             aria-label="تحديد أو تغيير مستواك الدراسي"
-            className="size-10 sm:size-10.5 rounded-xl border-border/80 text-foreground/80 hover:text-foreground bg-white hover:bg-muted cursor-pointer"
+            className="size-12 md:size-9 rounded-2xl md:rounded-xl border-border/80 text-foreground/90 hover:text-foreground bg-white hover:bg-muted shadow-xs cursor-pointer active:scale-95 transition-all"
           >
-            <SlidersHorizontal className="size-5" />
+            <SlidersHorizontal className="size-6 md:size-4" strokeWidth={2} />
           </Button>
 
           <Button className="hidden lg:flex" render={<Link href="/schedule" />} size="sm">
@@ -87,10 +87,14 @@ export default function Header() {
             variant="outline"
             size="icon"
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden size-10 sm:size-10.5 rounded-xl border-border/80 text-foreground/80 hover:text-foreground bg-white hover:bg-muted cursor-pointer"
+            className="md:hidden size-12 sm:size-11 rounded-2xl sm:rounded-xl border-border/80 text-foreground/90 hover:text-foreground bg-white hover:bg-muted shadow-xs cursor-pointer active:scale-95 transition-all"
             aria-label={isOpen ? "إغلاق القائمة" : "فتح القائمة"}
           >
-            {isOpen ? <X className="size-5.5" /> : <Menu className="size-5.5" />}
+            {isOpen ? (
+              <X className="size-6.5 sm:size-6" strokeWidth={2.2} />
+            ) : (
+              <Menu className="size-6.5 sm:size-6" strokeWidth={2.2} />
+            )}
           </Button>
         </div>
       </div>
@@ -106,7 +110,7 @@ export default function Header() {
                 href={link.href}
                 onClick={() => setIsOpen(false)}
                 className={cn(
-                  "px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center justify-between",
+                  "px-4 py-3 rounded-xl text-base font-semibold transition-all flex items-center justify-between",
                   isActive
                     ? "bg-primary/10 text-primary font-bold"
                     : "text-foreground/80 hover:text-foreground hover:bg-muted/70"

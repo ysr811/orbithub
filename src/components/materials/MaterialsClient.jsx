@@ -55,7 +55,7 @@ export default function MaterialsClient({ summaries = [] }) {
   }, [summaries, filters.major, filters.level]);
 
   return (
-    <div className="flex-1 flex flex-col gap-4 sm:gap-5 w-full font-cairo">
+    <div className="flex-1 flex flex-col gap-4 sm:gap-5 w-full mt-4">
       {/* ─── Responsive Toolbar: Search & Results Counter ────────────── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 w-full">
         <MaterialFilterBar

@@ -1,53 +1,76 @@
+export const STORAGE_KEY = "user_preferences";
+
 export const STORAGE_KEYS = {
-  ONBOARDING_COMPLETED: "onboarding_completed",
-  USER_MAJOR: "user_major",
-  USER_LEVEL: "user_level",
-  USER_SEMESTER: "user_semester",
+  USER_PREFERENCES: STORAGE_KEY,
 };
+
+// Safe JSON parser for localStorage
+function getRawPreferences() {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+// Safe JSON serializer for localStorage
+function saveRawPreferences(data) {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch {
+    // Ignore storage quota or disabled localStorage errors
+  }
+}
 
 export function isOnboardingCompleted() {
   if (typeof window === "undefined") return true;
-  return localStorage.getItem(STORAGE_KEYS.ONBOARDING_COMPLETED) === "true";
+  const prefs = getRawPreferences();
+  return Boolean(prefs.onboarding_completed);
 }
 
 export function setOnboardingCompleted(completed = true) {
   if (typeof window === "undefined") return;
+  const prefs = getRawPreferences();
   if (completed) {
-    localStorage.setItem(STORAGE_KEYS.ONBOARDING_COMPLETED, "true");
+    prefs.onboarding_completed = true;
   } else {
-    localStorage.removeItem(STORAGE_KEYS.ONBOARDING_COMPLETED);
+    delete prefs.onboarding_completed;
   }
+  saveRawPreferences(prefs);
 }
 
 export function getUserPreferences() {
   if (typeof window === "undefined") return { major: "", level: "", semester: "" };
+  const prefs = getRawPreferences();
   return {
-    major: localStorage.getItem(STORAGE_KEYS.USER_MAJOR) || "",
-    level: localStorage.getItem(STORAGE_KEYS.USER_LEVEL) || "",
-    semester: localStorage.getItem(STORAGE_KEYS.USER_SEMESTER) || "",
+    major: prefs.major ? String(prefs.major) : "",
+    level: prefs.level ? String(prefs.level) : "",
+    semester: prefs.semester ? String(prefs.semester) : "",
   };
 }
 
 export function setUserPreferences({ major, level, semester }) {
   if (typeof window === "undefined") return;
+  const prefs = getRawPreferences();
 
-  if (major) localStorage.setItem(STORAGE_KEYS.USER_MAJOR, String(major));
-  else localStorage.removeItem(STORAGE_KEYS.USER_MAJOR);
+  if (major) prefs.major = String(major);
+  else delete prefs.major;
 
-  if (level) localStorage.setItem(STORAGE_KEYS.USER_LEVEL, String(level));
-  else localStorage.removeItem(STORAGE_KEYS.USER_LEVEL);
+  if (level) prefs.level = String(level);
+  else delete prefs.level;
 
-  if (semester) localStorage.setItem(STORAGE_KEYS.USER_SEMESTER, String(semester));
-  else localStorage.removeItem(STORAGE_KEYS.USER_SEMESTER);
+  if (semester) prefs.semester = String(semester);
+  else delete prefs.semester;
 
+  saveRawPreferences(prefs);
   window.dispatchEvent(new Event("preferences_updated"));
 }
 
 export function resetUserPreferences() {
   if (typeof window === "undefined") return;
-  localStorage.removeItem(STORAGE_KEYS.ONBOARDING_COMPLETED);
-  localStorage.removeItem(STORAGE_KEYS.USER_MAJOR);
-  localStorage.removeItem(STORAGE_KEYS.USER_LEVEL);
-  localStorage.removeItem(STORAGE_KEYS.USER_SEMESTER);
+  localStorage.removeItem(STORAGE_KEY);
   window.dispatchEvent(new Event("preferences_updated"));
 }

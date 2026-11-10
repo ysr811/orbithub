@@ -121,7 +121,7 @@ export default function PreferencesModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="w-[calc(100%-3rem)] sm:w-full sm:max-w-xl md:max-w-2xl p-0 overflow-hidden bg-card border-border rounded-3xl font-cairo shadow-2xl">
+      <DialogContent className="w-[calc(100%-3rem)] sm:w-full sm:max-w-xl md:max-w-2xl p-0 overflow-hidden bg-white border-none shadow-none rounded-3xl font-cairo">
         {step === 1 && (
           /* ─── Step 1: Welcome & Overview (First-time onboarding only) ──── */
           <div className="flex flex-col">
@@ -265,10 +265,10 @@ export default function PreferencesModal({
           <div className="flex flex-col p-6 sm:p-8 md:p-9 gap-5 sm:gap-6">
             <DialogHeader className="gap-2 text-right">
               <DialogTitle className="text-xl sm:text-2xl font-bold tracking-tight text-foreground leading-snug">
-                نتمنى لك رحلة حافلة بالنجاح والتفوق
+                نتمنى لك التوفيق والنجاح
               </DialogTitle>
               <DialogDescription className="text-sm sm:text-base text-muted-foreground leading-relaxed pt-1">
-                أنت الآن جاهز تماماً للانطلاق! تم ضبط المنصة وفق تخصصك ومستواك الدراسي. نتمنى لك مسيرة دراسية ممتلئة بالإنجازات والعلامات العالية، وأن تكون هذه الخطوة بداية لقصة نجاح باهرة تصنعها بيدك. تذكر دائماً أن شغفك وجهدك هما سر تفوقك، ونحن معك في كل خطوة نحو القمة.
+                تم ضبط المنصة وفق تخصصك ومستواك الدراسي، ونتمنى لك مسيرة أكاديمية حافلة بالتميز والتفوق.
               </DialogDescription>
             </DialogHeader>
 

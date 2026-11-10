@@ -21,7 +21,7 @@ function section({ title = "Title", desc = "descrption", imgUrl, className }) {
           width={1080}
           height={820}
           priority
-          className="w-full lg:w-auto object-contain select-none h-auto"
+          className="w-full lg:w-auto object-contain select-none h-auto rounded-3xl"
         />
       </div>
     </section>

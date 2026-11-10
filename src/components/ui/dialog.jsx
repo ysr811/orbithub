@@ -59,7 +59,7 @@ function DialogContent({
       <DialogPrimitive.Popup
         data-slot="dialog-content"
         className={cn(
-          "fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-5 rounded-2xl border border-border bg-card p-6 font-cairo text-foreground shadow-2xl duration-150 outline-none sm:max-w-md data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+          "fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-5 rounded-2xl bg-white p-6 font-cairo text-foreground shadow-none border-none duration-150 outline-none sm:max-w-md data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
           className
         )}
         {...props}
@@ -70,14 +70,16 @@ function DialogContent({
             data-slot="dialog-close"
             render={
               <Button
+                type="button"
                 variant="ghost"
-                className="absolute top-3.5 left-3.5 rtl:left-3.5 rtl:right-auto ltr:right-3.5 ltr:left-auto size-8 rounded-full bg-background/80 hover:bg-background text-foreground backdrop-blur-xs shadow-xs z-20 cursor-pointer"
-                size="icon-xs"
+                size="icon-sm"
+                aria-label="إغلاق النافذة"
+                className="absolute top-4 left-4 rtl:left-4 rtl:right-auto ltr:right-4 ltr:left-auto size-9 rounded-xl border-none text-muted-foreground hover:text-foreground bg-white hover:bg-muted shadow-none z-20 cursor-pointer active:scale-95 transition-all"
               />
             }
           >
             <XIcon className="size-4" />
-            <span className="sr-only">Close</span>
+            <span className="sr-only">إغلاق</span>
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Popup>
@@ -115,7 +117,7 @@ function DialogFooter({
     >
       {children}
       {showCloseButton && (
-        <DialogPrimitive.Close render={<Button variant="outline" />}>
+        <DialogPrimitive.Close render={<Button variant="outline" size="sm" className="h-9 px-5 rounded-xl cursor-pointer" />}>
           إغلاق
         </DialogPrimitive.Close>
       )}

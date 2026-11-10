@@ -93,10 +93,10 @@ export default function MaterialActiveChips({
         return (
           <div
             key={chip.id}
-            className="group inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border border-border bg-card text-foreground shadow-2xs transition-colors"
+            className="group inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium border border-border bg-card text-foreground shadow-2xs transition-colors"
           >
             <Icon className="size-3 text-primary shrink-0" />
-            <span className="max-w-[180px] sm:max-w-xs truncate">{chip.label}</span>
+            <span className="max-w-45 sm:max-w-xs truncate">{chip.label}</span>
             <button
               type="button"
               onClick={() => onClearFilter(chip.key)}
