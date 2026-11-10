@@ -16,6 +16,7 @@ export default function MaterialsClient({ summaries = [] }) {
     setSearchQuery,
     isDrawerOpen,
     setIsDrawerOpen,
+    setMajor,
     setLevel,
     setSemester,
     setSubject,
@@ -34,6 +35,7 @@ export default function MaterialsClient({ summaries = [] }) {
   // Active filters human-readable labels for the empty state
   const activeFiltersSummary = useMemo(() => {
     const list = [];
+    if (filters.major) list.push(filters.major === "it" ? "تقنية المعلومات (IT)" : "علوم الحاسوب (CS)");
     if (filters.level) list.push(`المستوى ${filters.level}`);
     if (filters.semester) list.push(`الترم ${filters.semester}`);
     if (filters.subject) list.push(filters.subject);
@@ -42,8 +44,18 @@ export default function MaterialsClient({ summaries = [] }) {
     return list;
   }, [filters, searchQuery]);
 
+  // Detect if there are no materials at all for the selected major & level in the dataset
+  const isLevelEmpty = useMemo(() => {
+    if (!filters.level) return false;
+    return !summaries.some(
+      (s) =>
+        (!filters.major || !s.major || s.major.toLowerCase() === filters.major.toLowerCase()) &&
+        s.level === Number(filters.level)
+    );
+  }, [summaries, filters.major, filters.level]);
+
   return (
-    <div className="flex flex-col gap-4 sm:gap-5 w-full font-cairo">
+    <div className="flex-1 flex flex-col gap-4 sm:gap-5 w-full font-cairo">
       {/* ─── Responsive Toolbar: Search & Results Counter ────────────── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 w-full">
         <MaterialFilterBar
@@ -86,6 +98,7 @@ export default function MaterialsClient({ summaries = [] }) {
         isOpen={isDrawerOpen}
         onOpenChange={setIsDrawerOpen}
         filters={filters}
+        setMajor={setMajor}
         setLevel={setLevel}
         setSemester={setSemester}
         setSubject={setSubject}
@@ -99,8 +112,8 @@ export default function MaterialsClient({ summaries = [] }) {
       {/* ─── Materials Grid or Empty State ──────────────────────────── */}
       {filteredSummaries.length === 0 ? (
         <MaterialEmptyState
-          type="filter"
-          activeFiltersList={activeFiltersSummary}
+          type={isLevelEmpty || (!hasActiveFilters && !searchQuery.trim()) ? "drive-empty" : "filter"}
+          title={isLevelEmpty ? "لا توجد ملازم مضافة لهذا المستوى" : undefined}
           onReset={resetAll}
         />
       ) : (

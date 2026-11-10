@@ -46,9 +46,8 @@ export default function Home() {
         <div className="relative z-10 w-full mx-auto flex flex-col items-center justify-center">
           <div className="max-w-xl h-[35dvh] max-h-96 min-h-fit flex items-center justify-center px-4">
             <p className="text-sm sm:text-base leading-relaxed text-foreground/80 font-cairo ">
-              بوابتك الأكاديمية لطلاب علوم الحاسوب بجامعة حضرموت — صُممت لتسهيل
-              رحلتك الجامعية عبر تجميع المقررات، الملخصات، الجداول، ونماذج
-              الامتحانات في مكان واحد منظم يختصر عليك عناء البحث.
+              بوابتك الأكاديمية لطلاب كلية الحاسبات وتقنية المعلومات بجامعة حضرموت صُممت لتسهيل
+              رحلتك الجامعية عبر تجميع المقررات، الملازم، والجداول في مكان واحد منظم يختصر عليك عناء البحث.
             </p>
           </div>
           <Image
@@ -68,7 +67,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mb-12">
+      {/* <section className="mb-12">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 lg:gap-5">
           {shortcuts.map((item) => {
             const Icon = item.icon;
@@ -111,7 +110,7 @@ export default function Home() {
             );
           })}
         </div>
-      </section>
+      </section> */}
 
       <OnboardingModal />
     </>

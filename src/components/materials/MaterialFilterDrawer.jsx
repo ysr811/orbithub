@@ -11,10 +11,17 @@ import { FunnelPlus, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SelectField } from "@/components/ui/select";
 
+const MAJOR_OPTIONS = [
+  { value: "", label: "جميع التخصصات" },
+  { value: "cs", label: "علوم الحاسوب (CS)" },
+  { value: "it", label: "تقنية المعلومات (IT)" },
+];
+
 export default function MaterialFilterDrawer({
   isOpen,
   onOpenChange,
   filters,
+  setMajor,
   setLevel,
   setSemester,
   setSubject,
@@ -22,13 +29,14 @@ export default function MaterialFilterDrawer({
   resetAll,
   options,
   activeFilterCount,
-  savedPreferences = { level: "", semester: "" },
+  savedPreferences = { major: "", level: "", semester: "" },
 }) {
   const availableLevels =
     options?.levels?.length > 0 ? options.levels : [1, 2, 3, 4];
   const availableSemesters =
     options?.semesters?.length > 0 ? options.semesters : [1, 2];
 
+  const hasSavedMajor = Boolean(savedPreferences?.major);
   const hasSavedLevel = Boolean(savedPreferences?.level);
   const hasSavedSemester = Boolean(savedPreferences?.semester);
 
@@ -75,7 +83,17 @@ export default function MaterialFilterDrawer({
             ]}
           />
 
-          {/* 3. Semester (hidden when saved in user preferences) */}
+          {/* 3. Academic Major (hidden when saved in user preferences) */}
+          {!hasSavedMajor && (
+            <SelectField
+              label="التخصص الأكاديمي"
+              value={filters.major}
+              onChange={setMajor}
+              options={MAJOR_OPTIONS}
+            />
+          )}
+
+          {/* 4. Semester (hidden when saved in user preferences) */}
           {!hasSavedSemester && (
             <SelectField
               label="الترم الدراسي"
@@ -91,7 +109,7 @@ export default function MaterialFilterDrawer({
             />
           )}
 
-          {/* 4. Academic Level (hidden when saved in user preferences) */}
+          {/* 5. Academic Level (hidden when saved in user preferences) */}
           {!hasSavedLevel && (
             <SelectField
               label="المستوى الدراسي"

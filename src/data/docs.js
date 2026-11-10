@@ -4,7 +4,7 @@ import path from "path";
 export const docsList = [
   {
     slug: "how-it-works",
-    description: "نظرة عامة على الرؤية والأهداف الأكاديمية والتقنية لتسهيل دراسة علوم الحاسوب في جامعة حضرموت.",
+    description: "نظرة عامة على الرؤية والأهداف الأكاديمية والتقنية لتسهيل دراسة طلاب كلية الحاسبات وتقنية المعلومات في جامعة حضرموت.",
     lastUpdated: "7 نوفمبر 2026",
     fileName: "how-it-works.md",
   },

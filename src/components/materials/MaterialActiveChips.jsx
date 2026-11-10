@@ -1,5 +1,5 @@
 import React from "react";
-import { X, RotateCcw, Search, Layers, Calendar, BookText, GraduationCap } from "lucide-react";
+import { X, RotateCcw, Search, Layers, Calendar, BookText, GraduationCap, School } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function MaterialActiveChips({
@@ -7,12 +7,24 @@ export default function MaterialActiveChips({
   searchQuery,
   onClearFilter,
   onResetAll,
-  savedPreferences = { level: "", semester: "" },
+  savedPreferences = { major: "", level: "", semester: "" },
 }) {
   const chips = [];
 
+  const hasSavedMajor = Boolean(savedPreferences?.major);
   const hasSavedLevel = Boolean(savedPreferences?.level);
   const hasSavedSemester = Boolean(savedPreferences?.semester);
+
+  // Only display major chip if it is not already saved as a default background preference
+  if (filters?.major && !hasSavedMajor) {
+    chips.push({
+      id: "major",
+      key: "major",
+      icon: School,
+      label: filters.major === "it" ? "تقنية المعلومات (IT)" : "علوم الحاسوب (CS)",
+      ariaLabel: `إزالة فلتر التخصص`,
+    });
+  }
 
   // Only display level chip if it is not already saved as a default background preference
   if (filters?.level && !hasSavedLevel) {

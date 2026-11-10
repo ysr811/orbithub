@@ -50,12 +50,22 @@ export default function MarkdownViewer({ content }) {
               {children}
             </blockquote>
           ),
-          code: ({ inline, className, children, ...props }) => {
-            if (inline) {
+          pre: ({ node, children, ...props }) => (
+            <pre
+              dir="ltr"
+              className="rounded-2xl bg-card border border-border p-4 overflow-x-auto text-xs sm:text-sm font-mono my-5 text-foreground shadow-2xs"
+              {...props}
+            >
+              {children}
+            </pre>
+          ),
+          code: ({ node, className, children, ...props }) => {
+            const isBlock = Boolean(className) || (typeof children === "string" && children.includes("\n"));
+            if (!isBlock) {
               return (
                 <code
                   dir="ltr"
-                  className="rounded-md bg-muted px-1.5 py-0.5 font-mono text-xs text-primary font-semibold border border-border/60"
+                  className="rounded-md bg-muted px-1.5 py-0.5 font-mono text-xs text-primary font-semibold border border-border/60 mx-0.5 inline-block align-baseline"
                   {...props}
                 >
                   {children}
@@ -63,14 +73,9 @@ export default function MarkdownViewer({ content }) {
               );
             }
             return (
-              <pre
-                dir="ltr"
-                className="rounded-2xl bg-card border border-border p-4 overflow-x-auto text-xs sm:text-sm font-mono my-5 text-foreground shadow-2xs"
-              >
-                <code className={className} {...props}>
-                  {children}
-                </code>
-              </pre>
+              <code className={className} {...props}>
+                {children}
+              </code>
             );
           },
           table: ({ children }) => (

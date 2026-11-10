@@ -19,6 +19,11 @@ import {
   resetUserPreferences,
 } from "@/lib/userPreferences";
 
+const MAJOR_OPTIONS = [
+  { value: "cs", label: "علوم الحاسوب (CS)" },
+  { value: "it", label: "تقنية المعلومات (IT)" },
+];
+
 const LEVEL_OPTIONS = [
   { value: "1", label: "المستوى الأول" },
   { value: "2", label: "المستوى الثاني" },
@@ -39,6 +44,7 @@ export default function PreferencesModal({
 }) {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [step, setStep] = useState(initialStep);
+  const [major, setMajor] = useState("");
   const [level, setLevel] = useState("");
   const [semester, setSemester] = useState("");
 
@@ -63,6 +69,7 @@ export default function PreferencesModal({
 
       if (!isOnboardingCompleted() && !isDismissedThisSession) {
         const saved = getUserPreferences();
+        if (saved.major) setMajor(saved.major);
         if (saved.level) setLevel(saved.level);
         if (saved.semester) setSemester(saved.semester);
         setStep(1);
@@ -75,6 +82,7 @@ export default function PreferencesModal({
   useEffect(() => {
     if (isOpen) {
       const saved = getUserPreferences();
+      setMajor(saved.major || "");
       setLevel(saved.level || "");
       setSemester(saved.semester || "");
       setStep(initialStep);
@@ -96,13 +104,13 @@ export default function PreferencesModal({
   };
 
   const handleSave = () => {
-    if (!level || !semester) return;
-    setUserPreferences({ level, semester });
+    if (!major || !level || !semester) return;
+    setUserPreferences({ major, level, semester });
     setOnboardingCompleted(true);
     setIsOpen(false);
   };
 
-  const isStep2Valid = Boolean(level && semester);
+  const isStep2Valid = Boolean(major && level && semester);
 
   const handleNextFromStep2 = () => {
     if (!isStep2Valid) return;
@@ -133,10 +141,10 @@ export default function PreferencesModal({
             <div className="flex flex-col p-6 sm:p-8 md:p-9 gap-5 sm:gap-6">
               <DialogHeader className="gap-2 text-right">
                 <DialogTitle className="text-xl sm:text-2xl font-bold tracking-tight text-foreground leading-snug">
-                  أهلاً بك
+                  أهلاً بك في Orbit Hub
                 </DialogTitle>
                 <DialogDescription className="text-sm sm:text-base text-muted-foreground leading-relaxed pt-1">
-                  جمعنا لك كل ما تحتاجه لمسيرتك الدراسية في مكان واحد — من مقررات، ملازم، وجداول صُممت لتنير طريقك وتختصر جهدك. كل خطوة تخطوها هنا تقربك خطوة نحو طموحك في عالم التقنية والبرمجة. ابدأ رحلتك بثقة وشغف، فالتميز حليفك!
+                  جمعنا لك كل ما تحتاجه لمسيرتك الدراسية في كلية الحاسبات وتقنية المعلومات — من مقررات، ملازم، وجداول صُممت لتنير طريقك وتختصر جهدك. كل خطوة تخطوها هنا تقربك خطوة نحو طموحك في عالم التقنية والبرمجة. ابدأ رحلتك بثقة وشغف، فالتميز حليفك!
                 </DialogDescription>
               </DialogHeader>
 
@@ -165,18 +173,26 @@ export default function PreferencesModal({
         )}
 
         {step === 2 && (
-          /* ─── Step 2: Choose Level & Semester ────────────────────────── */
+          /* ─── Step 2: Choose Major, Level & Semester ─────────────────── */
           <div className="flex flex-col p-6 sm:p-8 md:p-9 gap-5 sm:gap-6">
             <DialogHeader className="gap-2 text-right">
               <DialogTitle className="text-xl sm:text-2xl font-bold tracking-tight text-foreground leading-snug">
-                حدد مستواك
+                حدد تخصصك ومستواك
               </DialogTitle>
               <DialogDescription className="text-sm sm:text-base text-muted-foreground leading-relaxed pt-1">
-                اختر مستواك والترم الحالي لتخصيص المنصة وتجهيز مقرراتك وملازمك تلقائياً عند زيارة الموقع.
+                اختر تخصصك الأكاديمي (CS أو IT) ومستواك الدراسي والترم لتخصيص المنصة وتجهيز مقرراتك تلقائياً.
               </DialogDescription>
             </DialogHeader>
 
             <div className="flex flex-col gap-4 sm:gap-5 py-1">
+              <SelectField
+                label="التخصص الأكاديمي"
+                value={major}
+                onChange={setMajor}
+                placeholder="اختر التخصص الأكاديمي"
+                options={MAJOR_OPTIONS}
+              />
+
               <SelectField
                 label="المستوى الدراسي"
                 value={level}
@@ -246,13 +262,13 @@ export default function PreferencesModal({
 
         {step === 3 && (
           /* ─── Step 3: Encouragement & Ambition (Wishes of Success) ──── */
-          <div className="flex flex-col p-6 sm:p-8 md:p-9 gap-5 sm:gap-6 pt-16">
+          <div className="flex flex-col p-6 sm:p-8 md:p-9 gap-5 sm:gap-6">
             <DialogHeader className="gap-2 text-right">
               <DialogTitle className="text-xl sm:text-2xl font-bold tracking-tight text-foreground leading-snug">
-                انطلق في رحلة نجاحك
+                نتمنى لك رحلة حافلة بالنجاح والتفوق
               </DialogTitle>
               <DialogDescription className="text-sm sm:text-base text-muted-foreground leading-relaxed pt-1">
-                أنت الآن جاهز تماماً للانطلاق! نتمنى لك مسيرة دراسية ممتلئة بالإنجازات والعلامات العالية، وأن تكون هذه الخطوة بداية لقصة نجاح باهرة تصنعها بيدك. تذكر دائماً أن شغفك وجهدك هما سر تفوقك، ونحن معك في كل خطوة نحو القمة.
+                أنت الآن جاهز تماماً للانطلاق! تم ضبط المنصة وفق تخصصك ومستواك الدراسي. نتمنى لك مسيرة دراسية ممتلئة بالإنجازات والعلامات العالية، وأن تكون هذه الخطوة بداية لقصة نجاح باهرة تصنعها بيدك. تذكر دائماً أن شغفك وجهدك هما سر تفوقك، ونحن معك في كل خطوة نحو القمة.
               </DialogDescription>
             </DialogHeader>
 
@@ -263,7 +279,7 @@ export default function PreferencesModal({
                 size="sm"
                 className="h-9 px-6 font-bold text-xs sm:text-sm cursor-pointer"
               >
-                ابدأ
+                ابدأ التصفح
               </Button>
 
               <Button

@@ -6,7 +6,7 @@ import { ArrowLeft, Calendar } from "lucide-react";
 
 export const metadata = {
   title: "المقالات والأدلة | OrbitHub",
-  description: "دليل ومقالات منصة Orbit Hub لطلاب علوم الحاسوب في جامعة حضرموت.",
+  description: "دليل ومقالات منصة Orbit Hub لطلاب كلية الحاسبات وتقنية المعلومات في جامعة حضرموت.",
 };
 
 export default function DecsOverviewPage() {

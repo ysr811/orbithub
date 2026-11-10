@@ -25,7 +25,7 @@ export default function MaterialsPage() {
     <div dir="rtl" className="min-h-screen flex flex-col font-cairo">
       <Header />
 
-      <main className="flex-1 w-full">
+      <main className="flex-1 w-full flex flex-col pb-6 sm:pb-8">
         <Suspense fallback={<MaterialSkeleton count={8} showHeaderSkeleton={true} />}>
           <MaterialsContent />
         </Suspense>

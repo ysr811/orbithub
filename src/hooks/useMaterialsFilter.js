@@ -4,6 +4,7 @@ import { useState, useMemo, useDeferredValue, useCallback, useEffect } from "rea
 import { getUserPreferences } from "@/lib/userPreferences";
 
 const INITIAL_FILTERS = {
+  major: "",
   level: "",
   semester: "",
   subject: "",
@@ -12,7 +13,7 @@ const INITIAL_FILTERS = {
 
 export function useMaterialsFilter(summaries = []) {
   const [filters, setFilters] = useState(INITIAL_FILTERS);
-  const [savedPreferences, setSavedPreferences] = useState({ level: "", semester: "" });
+  const [savedPreferences, setSavedPreferences] = useState({ major: "", level: "", semester: "" });
   const [searchQuery, setSearchQuery] = useState("");
   const [isFiltersOpen, setIsFiltersOpen] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -20,12 +21,14 @@ export function useMaterialsFilter(summaries = []) {
   // Synchronize filters with user's saved preferences
   useEffect(() => {
     const applySaved = () => {
-      const { level, semester } = getUserPreferences();
+      const { major, level, semester } = getUserPreferences();
+      const cleanMajor = major ? String(major).toLowerCase() : "";
       const cleanLevel = level ? String(level) : "";
       const cleanSemester = semester ? String(semester) : "";
-      setSavedPreferences({ level: cleanLevel, semester: cleanSemester });
+      setSavedPreferences({ major: cleanMajor, level: cleanLevel, semester: cleanSemester });
       setFilters((prev) => ({
         ...prev,
+        major: cleanMajor || prev.major,
         level: cleanLevel || prev.level,
         semester: cleanSemester || prev.semester,
       }));
@@ -40,6 +43,17 @@ export function useMaterialsFilter(summaries = []) {
   const deferredSearch = useDeferredValue(searchQuery.trim().toLowerCase());
 
   // Filter setters
+  const setMajor = useCallback((major) => {
+    setFilters((prev) => ({
+      ...prev,
+      major: major ? String(major).toLowerCase() : "",
+      level: "",
+      semester: "",
+      subject: "",
+      instructor: "",
+    }));
+  }, []);
+
   const setLevel = useCallback((level) => {
     setFilters((prev) => ({
       ...prev,
@@ -75,7 +89,9 @@ export function useMaterialsFilter(summaries = []) {
   }, []);
 
   const clearFilter = useCallback((key) => {
-    if (key === "level") {
+    if (key === "major") {
+      setMajor("");
+    } else if (key === "level") {
       setLevel("");
     } else if (key === "semester") {
       setSemester("");
@@ -86,11 +102,12 @@ export function useMaterialsFilter(summaries = []) {
     } else if (key === "search") {
       setSearchQuery("");
     }
-  }, [setLevel, setSemester, setSubject, setInstructor]);
+  }, [setMajor, setLevel, setSemester, setSubject, setInstructor]);
 
   // Reset transient filters back to default saved preferences
   const resetAll = useCallback(() => {
     setFilters({
+      major: savedPreferences.major || "",
       level: savedPreferences.level || "",
       semester: savedPreferences.semester || "",
       subject: "",
@@ -101,13 +118,17 @@ export function useMaterialsFilter(summaries = []) {
 
   // Derived options for dropdowns based on current scope
   const options = useMemo(() => {
-    const levels = [...new Set(summaries.map((s) => s.level))]
+    const majorFiltered = filters.major
+      ? summaries.filter((s) => !s.major || s.major.toLowerCase() === filters.major.toLowerCase())
+      : summaries;
+
+    const levels = [...new Set(majorFiltered.map((s) => s.level))]
       .filter(Boolean)
       .sort((a, b) => a - b);
 
     const levelFiltered = filters.level
-      ? summaries.filter((s) => s.level === Number(filters.level))
-      : summaries;
+      ? majorFiltered.filter((s) => s.level === Number(filters.level))
+      : majorFiltered;
 
     const semesters = [...new Set(levelFiltered.map((s) => s.semester))]
       .filter(Boolean)
@@ -130,11 +151,12 @@ export function useMaterialsFilter(summaries = []) {
       .sort();
 
     return { levels, semesters, subjects, instructors };
-  }, [summaries, filters.level, filters.semester, filters.subject]);
+  }, [summaries, filters.major, filters.level, filters.semester, filters.subject]);
 
   // Filtered materials
   const filteredSummaries = useMemo(() => {
     return summaries.filter((item) => {
+      if (filters.major && item.major && item.major.toLowerCase() !== filters.major.toLowerCase()) return false;
       if (filters.level && item.level !== Number(filters.level)) return false;
       if (filters.semester && item.semester !== Number(filters.semester)) return false;
       if (filters.subject && item.subject !== filters.subject) return false;
@@ -154,6 +176,7 @@ export function useMaterialsFilter(summaries = []) {
   // Active filter count (counts user-applied transient filters)
   const activeFilterCount = useMemo(() => {
     let count = 0;
+    if (filters.major && !savedPreferences.major) count += 1;
     if (filters.level && !savedPreferences.level) count += 1;
     if (filters.semester && !savedPreferences.semester) count += 1;
     if (filters.subject) count += 1;
@@ -172,6 +195,7 @@ export function useMaterialsFilter(summaries = []) {
     setIsFiltersOpen,
     isDrawerOpen,
     setIsDrawerOpen,
+    setMajor,
     setLevel,
     setSemester,
     setSubject,

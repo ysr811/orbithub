@@ -1,89 +1,89 @@
+"use client";
+
 import React from "react";
-import Link from "next/link";
-import { SearchX, BookOpen, RotateCcw, Home } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { SearchX, FolderSearch, RotateCcw, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function MaterialEmptyState({
-  type = "filter", // "filter" | "server"
+  type = "filter",
   title,
   description,
-  activeFiltersList = [],
   onReset,
+  onBack,
 }) {
-  const isServer = type === "server";
+  const router = useRouter();
+  const isDriveEmpty = type === "server" || type === "drive-empty";
 
-  const defaultTitle = isServer
-    ? "لا توجد ملخصات حالياً"
-    : "لا توجد نتائج مطابقة لبحثك";
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+      return;
+    }
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      router.back();
+    } else {
+      router.push("/");
+    }
+  };
 
-  const defaultDescription = isServer
-    ? "لم يتم العثور على أي ملازم بعد في مجلد Google Drive. ستظهر هنا تلقائياً فور إضافتها."
-    : "لم نتمكن من العثور على أي ملخصات تطابق معايير الفلترة أو كلمة البحث الحالية. يمكنك تعديل خيارات الفلترة أو مسحها بالكامل.";
+  const defaultTitle = isDriveEmpty
+    ? "لا توجد ملازم مضافة بعد"
+    : "لا توجد نتائج مطابقة";
+
+  const defaultDescription = isDriveEmpty
+    ? "لم يتم رفع أي ملازم لهذا المستوى في Google Drive حتى الآن، وستظهر هنا تلقائياً فور إضافتها."
+    : "لم نجد ملازم تطابق معايير البحث الحالية. يمكنك تعديل كلمات البحث أو مسح الفلاتر.";
 
   return (
     <div
       role="region"
       aria-label="حالة عدم وجود نتائج"
-      className="flex flex-col items-center justify-center text-center py-16 px-4 rounded-3xl border border-dashed border-border/80 bg-card max-w-2xl mx-auto w-full my-6 font-cairo transition-all"
+      className="flex-1 w-full flex flex-col items-center justify-center text-center py-8 px-4 max-w-md mx-auto font-cairo"
     >
-      {/* Visual Accent Icon Container */}
-      <div className="relative mb-5 flex items-center justify-center">
-        <div className="size-20 rounded-2xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary dark:text-[#7A89EA] shadow-inner">
-          {isServer ? (
-            <BookOpen className="size-10" strokeWidth={1.8} />
-          ) : (
-            <SearchX className="size-10" strokeWidth={1.8} />
-          )}
-        </div>
-        <div className="absolute -inset-2 rounded-3xl bg-primary/5 -z-10 animate-pulse" />
+      {/* Icon */}
+      <div className="size-14 rounded-2xl bg-muted/70 text-muted-foreground flex items-center justify-center mb-4">
+        {isDriveEmpty ? (
+          <FolderSearch  className="size-6" strokeWidth={1.75} />
+        ) : (
+          <SearchX className="size-6" strokeWidth={1.75} />
+        )}
       </div>
 
-      {/* Headings */}
-      <h3 className="text-xl sm:text-2xl font-black text-foreground mb-2 leading-tight">
+      {/* Typography */}
+      <h3 className="text-lg sm:text-xl font-bold text-foreground mb-1.5 leading-snug">
         {title || defaultTitle}
       </h3>
-      <p className="text-sm sm:text-base text-muted-foreground dark:text-[#9DA3C7] max-w-md mx-auto leading-relaxed mb-6">
+      <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-6">
         {description || defaultDescription}
       </p>
 
-      {/* Active Criteria Chips preview in empty state */}
-      {!isServer && activeFiltersList.length > 0 && (
-        <div className="mb-6 flex flex-wrap items-center justify-center gap-2 max-w-lg">
-          <span className="text-xs font-semibold text-muted-foreground ml-1">
-            الفلاتر النشطة:
-          </span>
-          {activeFiltersList.map((filter, index) => (
-            <span
-              key={index}
-              className="inline-flex items-center text-xs px-2.5 py-1 rounded-lg bg-muted text-foreground border border-border/80"
-            >
-              {filter}
-            </span>
-          ))}
-        </div>
-      )}
-
-      {/* Action CTA */}
-      <div className="flex flex-wrap items-center justify-center gap-3">
-        {isServer ? (
-          <Button render={<Link href="/" />} variant="outline" className="gap-2 font-semibold">
-            <Home className="size-4" />
-            العودة للرئيسية
+      {/* Primary Action Button */}
+      {isDriveEmpty ? (
+        <Button
+          type="button"
+          variant="default"
+          size="sm"
+          onClick={handleBack}
+          className="h-9 px-5 gap-2 font-bold cursor-pointer"
+        >
+          <ArrowRight className="size-3.5" />
+          الرجوع
+        </Button>
+      ) : (
+        onReset && (
+          <Button
+            type="button"
+            variant="default"
+            size="sm"
+            onClick={onReset}
+            className="h-9 px-5 gap-2 font-bold cursor-pointer"
+          >
+            <RotateCcw className="size-3.5" />
+            مسح الفلاتر
           </Button>
-        ) : (
-          onReset && (
-            <Button
-              type="button"
-              variant="default"
-              onClick={onReset}
-              className="gap-2 font-bold px-6 shadow-sm shadow-primary/25 cursor-pointer"
-            >
-              <RotateCcw className="size-4" />
-              مسح جميع الفلاتر
-            </Button>
-          )
-        )}
-      </div>
+        )
+      )}
     </div>
   );
 }
