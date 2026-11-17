@@ -9,7 +9,21 @@ function getRawPreferences() {
   if (typeof window === "undefined") return {};
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : {};
+    if (raw) return JSON.parse(raw);
+
+    const major = localStorage.getItem("user_major");
+    const level = localStorage.getItem("user_level");
+    const semester = localStorage.getItem("user_semester");
+    const onboarding = localStorage.getItem("onboarding_completed");
+    if (major || level || semester || onboarding) {
+      return {
+        major: major || "",
+        level: level || "",
+        semester: semester || "",
+        onboarding_completed: onboarding === "true",
+      };
+    }
+    return {};
   } catch {
     return {};
   }

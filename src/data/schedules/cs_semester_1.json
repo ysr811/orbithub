@@ -1,0 +1,705 @@
+{
+  "major": "cs",
+  "faculty": "كلية الحاسبات وتقنية المعلومات",
+  "department": "قسم علوم الحاسوب",
+  "academicYear": "2026-2027",
+  "semester": 1,
+  "periods": [
+    { "id": "8-10", "time": "08:00 - 10:00" },
+    { "id": "10-12", "time": "10:00 - 12:00" },
+    { "id": "12-2", "time": "12:00 - 02:00" }
+  ],
+  "days": [
+    { "id": "sunday", "nameArabic": "الأحد" },
+    { "id": "monday", "nameArabic": "الإثنين" },
+    { "id": "tuesday", "nameArabic": "الثلاثاء" },
+    { "id": "wednesday", "nameArabic": "الأربعاء" },
+    { "id": "thursday", "nameArabic": "الخميس" }
+  ],
+  "levels": {
+    "1": {
+      "level": 1,
+      "schedule": {
+        "sunday": {
+          "8-10": [
+            {
+              "subject": "Computer Programming I",
+              "hall": "محلق 2",
+              "instructor": "د. سميرة برعود",
+              "group": "ALL",
+              "type": "theory"
+            }
+          ],
+          "10-12": [
+            {
+              "subject": "Comp Prog1",
+              "hall": "LAB 2",
+              "instructor": "م. مريم بن سلوم",
+              "group": "G1",
+              "type": "lab"
+            },
+            {
+              "subject": "Computer Skills",
+              "hall": "LAB 1",
+              "instructor": "م. خلود مكارم",
+              "group": "G2",
+              "type": "lab"
+            }
+          ],
+          "12-2": [
+            {
+              "subject": "Computer Skill",
+              "hall": "محلق 2",
+              "instructor": "م. خلود مكارم",
+              "group": "ALL",
+              "type": "theory"
+            }
+          ]
+        },
+        "monday": {
+          "8-10": [
+            {
+              "subject": "Islamic Culture I",
+              "hall": "محلق 2",
+              "instructor": "أ. ياسر بكير",
+              "group": "ALL",
+              "type": "theory"
+            }
+          ],
+          "10-12": [
+            {
+              "subject": "English 1",
+              "hall": "محلق 2",
+              "instructor": "أ. عبير المحمدي",
+              "group": "ALL",
+              "type": "theory"
+            }
+          ],
+          "12-2": [
+            {
+              "subject": "Arabic Language I",
+              "hall": "محلق 2",
+              "instructor": "أ. هالة ديان",
+              "group": "ALL",
+              "type": "theory"
+            }
+          ]
+        },
+        "tuesday": {
+          "8-10": [],
+          "10-12": [],
+          "12-2": []
+        },
+        "wednesday": {
+          "8-10": [
+            {
+              "subject": "Comp Prog1",
+              "hall": "LAB 2",
+              "instructor": "م. مريم بن سلوم",
+              "group": "G2",
+              "type": "lab"
+            },
+            {
+              "subject": "Computer Skills",
+              "hall": "LAB 1",
+              "instructor": "م. خلود مكارم",
+              "group": "G1",
+              "type": "lab"
+            }
+          ],
+          "10-12": [
+            {
+              "subject": "Comp Prog1",
+              "hall": "LAB 2",
+              "instructor": "م. مريم بن سلوم",
+              "group": "G3",
+              "type": "lab"
+            },
+            {
+              "subject": "Computer Skills",
+              "hall": "LAB 1",
+              "instructor": "م. خلود مكارم",
+              "group": "G4",
+              "type": "lab"
+            }
+          ],
+          "12-2": [
+            {
+              "subject": "Comp Prog1",
+              "hall": "LAB 2",
+              "instructor": "م. مريم بن سلوم",
+              "group": "G4",
+              "type": "lab"
+            },
+            {
+              "subject": "Computer Skills",
+              "hall": "LAB 1",
+              "instructor": "م. خلود مكارم",
+              "group": "G3",
+              "type": "lab"
+            }
+          ]
+        },
+        "thursday": {
+          "8-10": [
+            {
+              "subject": "Differential Calculus",
+              "hall": "محلق 2",
+              "instructor": "م. عائشة بامحمود",
+              "group": "ALL",
+              "type": "theory"
+            }
+          ],
+          "10-12": [],
+          "12-2": []
+        }
+      }
+    },
+    "2": {
+      "level": 2,
+      "schedule": {
+        "sunday": {
+          "8-10": [
+            {
+              "subject": "Com. Org. & Arch",
+              "hall": "LAB 4",
+              "instructor": "م. ميادة عباد",
+              "group": "G1",
+              "type": "lab"
+            },
+            {
+              "subject": "OOP",
+              "hall": "LAB 3",
+              "instructor": "م. خديجة باعمر",
+              "group": "G2",
+              "type": "lab"
+            },
+            {
+              "subject": "Data Structures",
+              "hall": "LAB 5",
+              "instructor": "م. حسين البيتي",
+              "group": "G3",
+              "type": "lab"
+            }
+          ],
+          "10-12": [
+            {
+              "subject": "Com. Org. & Arch",
+              "hall": "LAB 4",
+              "instructor": "م. ميادة عباد",
+              "group": "G3",
+              "type": "lab"
+            },
+            {
+              "subject": "OOP",
+              "hall": "LAB 3",
+              "instructor": "م. خديجة باعمر",
+              "group": "G4",
+              "type": "lab"
+            },
+            {
+              "subject": "Data Structures",
+              "hall": "LAB 5",
+              "instructor": "م. حسين البيتي",
+              "group": "G1",
+              "type": "lab"
+            }
+          ],
+          "12-2": [
+            {
+              "subject": "Com. Org. & Arch",
+              "hall": "LAB 4",
+              "instructor": "م. ميادة عباد",
+              "group": "G4",
+              "type": "lab"
+            },
+            {
+              "subject": "OOP",
+              "hall": "LAB 3",
+              "instructor": "م. خديجة باعمر",
+              "group": "G1",
+              "type": "lab"
+            },
+            {
+              "subject": "Data Structures",
+              "hall": "LAB 5",
+              "instructor": "م. حسين البيتي",
+              "group": "G2",
+              "type": "lab"
+            }
+          ]
+        },
+        "monday": {
+          "8-10": [
+            {
+              "subject": "Com. Org. & Arch",
+              "hall": "LAB 4",
+              "instructor": "م. ميادة عباد",
+              "group": "G2",
+              "type": "lab"
+            },
+            {
+              "subject": "OOP",
+              "hall": "LAB 3",
+              "instructor": "م. خديجة باعمر",
+              "group": "G3",
+              "type": "lab"
+            },
+            {
+              "subject": "Data Structures",
+              "hall": "LAB 5",
+              "instructor": "م. حسين البيتي",
+              "group": "G4",
+              "type": "lab"
+            }
+          ],
+          "10-12": [
+            {
+              "subject": "Computer Organization & Architecture",
+              "hall": "محلق 3",
+              "instructor": "د. هشام باحميش",
+              "group": "ALL",
+              "type": "theory"
+            }
+          ],
+          "12-2": [
+            {
+              "subject": "OOP",
+              "hall": "محلق 3",
+              "instructor": "أ. قمر الرشيدي",
+              "group": "ALL",
+              "type": "theory"
+            }
+          ]
+        },
+        "tuesday": {
+          "8-10": [
+            {
+              "subject": "Theory of Computation",
+              "hall": "محلق 3",
+              "instructor": "د. حسن مقيبل",
+              "group": "ALL",
+              "type": "theory"
+            }
+          ],
+          "10-12": [
+            {
+              "subject": "English Language III",
+              "hall": "محلق 3",
+              "instructor": "أ. عبير المحمدي",
+              "group": "ALL",
+              "type": "theory"
+            }
+          ],
+          "12-2": [
+            {
+              "subject": "Data Structures",
+              "hall": "محلق 3",
+              "instructor": "د. وفاء الديني",
+              "group": "ALL",
+              "type": "theory"
+            }
+          ]
+        },
+        "wednesday": {
+          "8-10": [
+            {
+              "subject": "Theory of Computation",
+              "hall": "محلق 3",
+              "instructor": "د. حسن مقيبل",
+              "group": "ALL",
+              "type": "theory"
+            }
+          ],
+          "10-12": [],
+          "12-2": []
+        },
+        "thursday": {
+          "8-10": [
+            {
+              "subject": "Discrete Structures",
+              "hall": "محلق 2",
+              "instructor": "م. عائشة السعدي",
+              "group": "ALL",
+              "type": "theory"
+            }
+          ],
+          "10-12": [],
+          "12-2": []
+        }
+      }
+    },
+    "3": {
+      "level": 3,
+      "schedule": {
+        "sunday": {
+          "8-10": [
+            {
+              "subject": "Artificial Intelligence",
+              "hall": "311",
+              "instructor": "د. وفاء الديني",
+              "group": "ALL",
+              "type": "theory"
+            }
+          ],
+          "10-12": [
+            {
+              "subject": "Database Administration",
+              "hall": "311",
+              "instructor": "أ. زاهر بامسعود",
+              "group": "ALL",
+              "type": "theory"
+            }
+          ],
+          "12-2": [
+            {
+              "subject": "Software Engineering",
+              "hall": "104",
+              "instructor": "د. إبراهيم فاضل",
+              "group": "ALL",
+              "type": "theory"
+            }
+          ]
+        },
+        "monday": {
+          "8-10": [
+            {
+              "subject": "Technical Writing",
+              "hall": "310",
+              "instructor": "أ. عبير المحمدي",
+              "group": "ALL",
+              "type": "theory"
+            }
+          ],
+          "10-12": [
+            {
+              "subject": "Database Admin",
+              "hall": "309",
+              "instructor": "أ. عزيزة باقطيان",
+              "group": "G2",
+              "type": "lab"
+            },
+            {
+              "subject": "Artificial Intelligence",
+              "hall": "310",
+              "instructor": "أ. ولاء بازهير",
+              "group": "G3",
+              "type": "lab"
+            },
+            {
+              "subject": "Fund of Comp .Net",
+              "hall": "General LAB",
+              "instructor": "أ. زاهر بامسعود",
+              "group": "G1",
+              "type": "lab"
+            }
+          ],
+          "12-2": []
+        },
+        "tuesday": {
+          "8-10": [
+            {
+              "subject": "Fundamentals of Computer Networks",
+              "hall": "311",
+              "instructor": "د. أمال بن طاهر",
+              "group": "ALL",
+              "type": "theory"
+            }
+          ],
+          "10-12": [
+            {
+              "subject": "Professional Ethics",
+              "hall": "311",
+              "instructor": "د. حسن مقيبل",
+              "group": "ALL",
+              "type": "theory"
+            }
+          ],
+          "12-2": [
+            {
+              "subject": "Visual Programming",
+              "hall": "311",
+              "instructor": "أ. ولاء بازهير",
+              "group": "ALL",
+              "type": "theory"
+            }
+          ]
+        },
+        "wednesday": {
+          "8-10": [
+            {
+              "subject": "Soft. Eng",
+              "hall": "المناقشة",
+              "instructor": "م. سارة باوزير",
+              "group": "G2",
+              "type": "lab"
+            },
+            {
+              "subject": "Visual Prog",
+              "hall": "309",
+              "instructor": "م. خلود بوسبعه",
+              "group": "G3",
+              "type": "lab"
+            },
+            {
+              "subject": "Artificial Intelligence",
+              "hall": "LAB 3",
+              "instructor": "أ. ولاء بازهير",
+              "group": "G1",
+              "type": "lab"
+            }
+          ],
+          "10-12": [
+            {
+              "subject": "Soft. Eng",
+              "hall": "المناقشة",
+              "instructor": "م. سارة باوزير",
+              "group": "G1",
+              "type": "lab"
+            },
+            {
+              "subject": "Visual Prog",
+              "hall": "LAB 3",
+              "instructor": "م. خلود بوسبعه",
+              "group": "G2",
+              "type": "lab"
+            },
+            {
+              "subject": "Database Admin",
+              "hall": "309",
+              "instructor": "أ. عزيزة باقطيان",
+              "group": "G3",
+              "type": "lab"
+            }
+          ],
+          "12-2": [
+            {
+              "subject": "Soft. Eng",
+              "hall": "General LAB",
+              "instructor": "م. سارة باوزير",
+              "group": "G3",
+              "type": "lab"
+            },
+            {
+              "subject": "Visual Prog",
+              "hall": "LAB 3",
+              "instructor": "م. خلود بوسبعه",
+              "group": "G1",
+              "type": "lab"
+            },
+            {
+              "subject": "Fund of Comp .Net",
+              "hall": "المناقشة",
+              "instructor": "أ. زاهر بامسعود",
+              "group": "G2",
+              "type": "lab"
+            }
+          ]
+        },
+        "thursday": {
+          "8-10": [
+            {
+              "subject": "Introduction to Statics & Probability",
+              "hall": "محلق 3",
+              "instructor": "د. فاطمة قوقح",
+              "group": "ALL",
+              "type": "theory"
+            }
+          ],
+          "10-12": [],
+          "12-2": []
+        }
+      }
+    },
+    "4": {
+      "level": 4,
+      "schedule": {
+        "sunday": {
+          "8-10": [
+            {
+              "subject": "Adv. Sw. Design & Dev",
+              "hall": "LAB 1",
+              "instructor": "أ. مرام باعطية",
+              "group": "G1",
+              "type": "lab"
+            },
+            {
+              "subject": "Mobile Application",
+              "hall": "LAB 3",
+              "instructor": "م. سارة باوزير",
+              "group": "G2",
+              "type": "lab"
+            },
+            {
+              "subject": "Decision Support Sys",
+              "hall": "LAB 2",
+              "instructor": "أ. قمر الرشيدي",
+              "group": "G3",
+              "type": "lab"
+            }
+          ],
+          "10-12": [
+            {
+              "subject": "Adv. Sw. Design & Dev",
+              "hall": "LAB 1",
+              "instructor": "أ. مرام باعطية",
+              "group": "G2",
+              "type": "lab"
+            },
+            {
+              "subject": "Mobile Application",
+              "hall": "LAB 3",
+              "instructor": "م. سارة باوزير",
+              "group": "G3",
+              "type": "lab"
+            },
+            {
+              "subject": "Decision Support Sys",
+              "hall": "LAB 2",
+              "instructor": "أ. قمر الرشيدي",
+              "group": "G1",
+              "type": "lab"
+            }
+          ],
+          "12-2": [
+            {
+              "subject": "Adv. Sw. Design & Dev",
+              "hall": "LAB 1",
+              "instructor": "أ. مرام باعطية",
+              "group": "G3",
+              "type": "lab"
+            },
+            {
+              "subject": "Mobile Application",
+              "hall": "LAB 3",
+              "instructor": "م. سارة باوزير",
+              "group": "G1",
+              "type": "lab"
+            },
+            {
+              "subject": "Decision Support Sys",
+              "hall": "LAB 2",
+              "instructor": "أ. قمر الرشيدي",
+              "group": "G2",
+              "type": "lab"
+            }
+          ]
+        },
+        "monday": {
+          "8-10": [
+            {
+              "subject": "Database Admin",
+              "hall": "General LAB",
+              "instructor": "أ. عزيزة باقطيان",
+              "group": "G1",
+              "type": "lab"
+            },
+            {
+              "subject": "Artificial Intelligence",
+              "hall": "309",
+              "instructor": "أ. ولاء بازهير",
+              "group": "G2",
+              "type": "lab"
+            },
+            {
+              "subject": "Fund of Comp .Net",
+              "hall": "LAB 2",
+              "instructor": "أ. زاهر بامسعود",
+              "group": "G3",
+              "type": "lab"
+            }
+          ],
+          "10-12": [
+            {
+              "subject": "Graduation Projects",
+              "hall": "قاعات التخرج",
+              "instructor": "مشرفو المشاريع",
+              "group": "ALL",
+              "type": "project"
+            }
+          ],
+          "12-2": [
+            {
+              "subject": "Graduation Projects",
+              "hall": "قاعات التخرج",
+              "instructor": "مشرفو المشاريع",
+              "group": "ALL",
+              "type": "project"
+            }
+          ]
+        },
+        "tuesday": {
+          "8-10": [
+            {
+              "subject": "Graduation Projects",
+              "hall": "قاعات التخرج",
+              "instructor": "مشرفو المشاريع",
+              "group": "ALL",
+              "type": "project"
+            }
+          ],
+          "10-12": [
+            {
+              "subject": "Graduation Projects",
+              "hall": "قاعات التخرج",
+              "instructor": "مشرفو المشاريع",
+              "group": "ALL",
+              "type": "project"
+            }
+          ],
+          "12-2": [
+            {
+              "subject": "Graduation Projects",
+              "hall": "قاعات التخرج",
+              "instructor": "مشرفو المشاريع",
+              "group": "ALL",
+              "type": "project"
+            }
+          ]
+        },
+        "wednesday": {
+          "8-10": [
+            {
+              "subject": "Decision Support Systems",
+              "hall": "311",
+              "instructor": "د. أمال بن طاهر",
+              "group": "ALL",
+              "type": "theory"
+            }
+          ],
+          "10-12": [
+            {
+              "subject": "Advanced Software Design & Development",
+              "hall": "311",
+              "instructor": "د. عبدالله بكير",
+              "group": "ALL",
+              "type": "theory"
+            }
+          ],
+          "12-2": [
+            {
+              "subject": "Mobile Application Development",
+              "hall": "311",
+              "instructor": "أ. محمد كعدان",
+              "group": "ALL",
+              "type": "theory"
+            }
+          ]
+        },
+        "thursday": {
+          "8-10": [
+            {
+              "subject": "Linear Algebra",
+              "hall": "محلق 3",
+              "instructor": "أ. أمل دعكيك",
+              "group": "ALL",
+              "type": "theory"
+            }
+          ],
+          "10-12": [],
+          "12-2": []
+        }
+      }
+    }
+  }
+}

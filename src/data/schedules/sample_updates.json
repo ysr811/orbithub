@@ -1,0 +1,59 @@
+{
+  "major": "cs",
+  "level": 2,
+  "semester": 1,
+  "updates": [
+    {
+      "id": "alert-info-1",
+      "date": "2026-11-15",
+      "day": "sunday",
+      "period": "8-10",
+      "group": "ALL",
+      "subject": "Computer Organization & Architecture",
+      "type": "info",
+      "typeArabic": "معلومة",
+      "title": "حضور الدكتور الساعة 8:30",
+      "description": "سيبدأ الدكتور المحاضرة في تمام الساعة 8:30 صباحاً بدلاً من 8:00 في محلق 3.",
+      "hall": "محلق 3"
+    },
+    {
+      "id": "alert-warning-1",
+      "date": "2026-11-16",
+      "day": "monday",
+      "period": "12-2",
+      "group": "ALL",
+      "subject": "OOP",
+      "type": "warning",
+      "typeArabic": "تنبيه تسليم",
+      "title": "آخر موعد لتسليم الواجب البرمجي",
+      "description": "تذكير لجميع الفئات: تسليم التكليف العملي الثاني للمعمل قبل نهاية دوام اليوم.",
+      "hall": "LAB 3"
+    },
+    {
+      "id": "alert-quiz-1",
+      "date": "2026-11-17",
+      "day": "tuesday",
+      "period": "12-2",
+      "group": "ALL",
+      "subject": "Data Structures",
+      "type": "quiz",
+      "typeArabic": "كويز قادم",
+      "title": "كويز هياكل البيانات",
+      "description": "اختبار قصير في موضوع القوائم المترابطة (Linked Lists).",
+      "hall": "محلق 3"
+    },
+    {
+      "id": "alert-good-1",
+      "date": "2026-11-18",
+      "day": "wednesday",
+      "period": "10-12",
+      "group": "ALL",
+      "subject": "Theory of Computation",
+      "type": "good_news",
+      "typeArabic": "خبر جيد",
+      "title": "تمديد موعد تسليم النشاط",
+      "description": "تم تأجيل موعد تسليم النشاط النظري إلى الأسبوع القادم استجابة لطلب مندوبي الدفعة.",
+      "hall": "محلق 3"
+    }
+  ]
+}

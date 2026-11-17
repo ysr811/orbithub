@@ -3,7 +3,7 @@
 تعتمد منصة **Orbit Hub** على هيكل مجلدات صارم ومرتب في Google Drive. يتيح هذا الهيكل للزاحف السحابي (Drive Crawler) قراءة المستويات والأترام والمواد والأساتذة تلقائياً دون الحاجة لقاعدة بيانات يدوية.
 
 > 📁 **ملاحظة:** إذا أحببت الاطلاع على ملفات ومجلدات Google Drive المعتمدة واستعراضها، يمكنك ذلك من خلال هذا الرابط:  
-> [اضغط هنا لفتح وتصفح مجلد ملفات Google Drive](https://drive.google.com/drive/folders/1H9QKECsU_ITv_9hvOv9jA4Kw07Rj_m6j?usp=drive_link)
+> [اضغط هنا لفتح وتصفح مجلد ملفات Google Drive](https://drive.google.com/drive/folders/1IQyvjJFvF_JlIj5CCob2QwyCQDxePb83?usp=sharing)
 
 ---
 

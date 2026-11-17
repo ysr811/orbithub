@@ -180,7 +180,7 @@ export default function PreferencesModal({
                 حدد تخصصك ومستواك
               </DialogTitle>
               <DialogDescription className="text-sm sm:text-base text-muted-foreground leading-relaxed pt-1">
-                اختر تخصصك الأكاديمي (CS أو IT) ومستواك الدراسي والترم لتخصيص المنصة وتجهيز مقرراتك تلقائياً.
+                اختر تخصصك الأكاديمي ومستواك الدراسي والترم لتخصيص المنصة وتجهيز مقرراتك تلقائياً.
               </DialogDescription>
             </DialogHeader>
 

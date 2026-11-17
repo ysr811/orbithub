@@ -201,13 +201,15 @@ async function crawlDrive() {
 export const getSummaries = unstable_cache(
   async () => {
     try {
-      return await crawlDrive();
+      const data = await crawlDrive();
+      console.log(`[Drive Crawler] Successfully crawled ${data.length} materials.`);
+      return data;
     } catch (error) {
-      console.error("Error fetching Google Drive summaries:", error?.message || error);
+      console.error("[Drive Crawler] Error fetching Google Drive summaries:", error?.message || error);
       return [];
     }
   },
-  ["orbithub-summaries-v4"],
+  ["orbithub-summaries-v5"],
   {
     revalidate: 3600,
     tags: ["summaries"],
