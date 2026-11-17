@@ -1,6 +1,6 @@
 import React from "react";
-import Header from "@/components/Header";
-import ScheduleEmptyState from "@/components/schedule/ScheduleEmptyState";
+import EmptyStatePage from "@/components/EmptyStatePage";
+import { CalendarDays } from "lucide-react";
 
 export const metadata = {
   title: "الجدول الأكاديمي | OrbitHub",
@@ -10,12 +10,12 @@ export const metadata = {
 
 export default function SchedulePage() {
   return (
-    <div dir="rtl" className="min-h-screen flex flex-col font-cairo">
-      <Header />
-
-      <main className="flex-1 w-full flex flex-col items-center justify-center pb-8 pt-2">
-        <ScheduleEmptyState />
-      </main>
-    </div>
+    <EmptyStatePage
+      title="الجدول الأكاديمي"
+      description="صفحة الجدول الأكاديمي والتحديثات قيد التطوير والتجهيز حالياً، وستكون متاحة فور اعتمادها وتحديثها."
+      icon={CalendarDays}
+      buttonText="العودة للرئيسية"
+      buttonHref="/"
+    />
   );
 }
