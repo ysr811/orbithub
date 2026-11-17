@@ -10,6 +10,14 @@ function getDriveClient() {
     throw new Error("Missing Google Drive credentials in environment variables");
   }
 
+  private_key = private_key.trim();
+  if (
+    (private_key.startsWith('"') && private_key.endsWith('"')) ||
+    (private_key.startsWith("'") && private_key.endsWith("'"))
+  ) {
+    private_key = private_key.slice(1, -1);
+  }
+
   const auth = new google.auth.GoogleAuth({
     credentials: {
       client_email,

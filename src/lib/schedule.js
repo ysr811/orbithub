@@ -6,10 +6,18 @@ import sampleUpdates from "@/data/schedules/sample_updates.json";
 // ─── Google Drive Client Initialization ──────────────────────────────
 function getDriveClient() {
   const client_email = process.env.GOOGLE_CLIENT_EMAIL;
-  const private_key = process.env.GOOGLE_PRIVATE_KEY;
+  let private_key = process.env.GOOGLE_PRIVATE_KEY;
 
   if (!client_email || !private_key) {
     return null;
+  }
+
+  private_key = private_key.trim();
+  if (
+    (private_key.startsWith('"') && private_key.endsWith('"')) ||
+    (private_key.startsWith("'") && private_key.endsWith("'"))
+  ) {
+    private_key = private_key.slice(1, -1);
   }
 
   const auth = new google.auth.GoogleAuth({
