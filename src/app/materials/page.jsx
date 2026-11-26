@@ -22,9 +22,8 @@ async function MaterialsContent() {
 
 export default function MaterialsPage() {
   return (
-    // <Suspense fallback={<MaterialSkeleton count={8} showHeaderSkeleton />}>
-    //   <MaterialsContent />
-    // </Suspense>
-    <MaterialSkeleton count={10} showHeaderSkeleton />
+    <Suspense fallback={<MaterialSkeleton count={10} showHeaderSkeleton />}>
+      <MaterialsContent />
+    </Suspense>
   );
 }
