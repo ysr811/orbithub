@@ -1,20 +1,26 @@
 "use client";
 
-import React from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
+  DialogFooter,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { FunnelPlus, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SelectField } from "@/components/ui/select";
+import {
+  MAJOR_OPTIONS,
+  DEFAULT_LEVELS,
+  DEFAULT_SEMESTERS,
+  getShortLevelLabel,
+  getShortSemesterLabel,
+} from "@/lib/academics";
 
-const MAJOR_OPTIONS = [
+const ALL_MAJORS_OPTIONS = [
   { value: "", label: "جميع التخصصات" },
-  { value: "cs", label: "علوم الحاسوب (CS)" },
-  { value: "it", label: "تقنية المعلومات (IT)" },
+  ...MAJOR_OPTIONS,
 ];
 
 export default function MaterialFilterDrawer({
@@ -32,9 +38,9 @@ export default function MaterialFilterDrawer({
   savedPreferences = { major: "", level: "", semester: "" },
 }) {
   const availableLevels =
-    options?.levels?.length > 0 ? options.levels : [1, 2, 3, 4];
+    options?.levels?.length > 0 ? options.levels : DEFAULT_LEVELS;
   const availableSemesters =
-    options?.semesters?.length > 0 ? options.semesters : [1, 2];
+    options?.semesters?.length > 0 ? options.semesters : DEFAULT_SEMESTERS;
 
   const hasSavedMajor = Boolean(savedPreferences?.major);
   const hasSavedLevel = Boolean(savedPreferences?.level);
@@ -43,7 +49,6 @@ export default function MaterialFilterDrawer({
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="w-[calc(100%-3rem)] sm:w-full sm:max-w-xl md:max-w-2xl p-6 sm:p-8 md:p-9 bg-white border-none shadow-none rounded-3xl font-cairo flex flex-col gap-5 sm:gap-6">
-        {/* Header */}
         <DialogHeader className="gap-2 text-right">
           <div className="flex items-center gap-2.5">
             <FunnelPlus className="size-4 text-primary" />
@@ -53,7 +58,6 @@ export default function MaterialFilterDrawer({
           </div>
         </DialogHeader>
 
-        {/* Filters Form */}
         <div className="flex flex-col gap-4 sm:gap-5">
           {/* 1. Subject */}
           <SelectField
@@ -89,7 +93,7 @@ export default function MaterialFilterDrawer({
               label="التخصص الأكاديمي"
               value={filters.major}
               onChange={setMajor}
-              options={MAJOR_OPTIONS}
+              options={ALL_MAJORS_OPTIONS}
             />
           )}
 
@@ -103,7 +107,7 @@ export default function MaterialFilterDrawer({
                 { value: "", label: "جميع الفصول الدراسية" },
                 ...availableSemesters.map((sem) => ({
                   value: String(sem),
-                  label: `الترم ${sem}`,
+                  label: getShortSemesterLabel(sem),
                 })),
               ]}
             />
@@ -119,21 +123,20 @@ export default function MaterialFilterDrawer({
                 { value: "", label: "جميع المستويات" },
                 ...availableLevels.map((lvl) => ({
                   value: String(lvl),
-                  label: `المستوى ${lvl}`,
+                  label: getShortLevelLabel(lvl),
                 })),
               ]}
             />
           )}
         </div>
 
-        {/* Footer Actions */}
-        <div className="flex items-center justify-between pt-5 border-t border-border/50">
+        <DialogFooter className="flex-row items-center justify-between sm:justify-between pt-5">
           <Button
             type="button"
             variant="default"
             onClick={() => onOpenChange(false)}
             size="sm"
-            className="h-9 px-6 font-bold text-xs sm:text-sm cursor-pointer"
+            className="h-9 px-6 font-bold text-xs sm:text-sm"
           >
             تطبيق
           </Button>
@@ -144,13 +147,13 @@ export default function MaterialFilterDrawer({
               variant="ghost"
               onClick={resetAll}
               size="sm"
-              className="h-9 px-3 gap-1.5 text-xs text-destructive hover:bg-destructive/10 cursor-pointer"
+              className="h-9 px-3 gap-1.5 text-xs text-destructive hover:bg-destructive/10"
             >
               <RotateCcw className="size-3.5" />
               مسح الفلاتر
             </Button>
           )}
-        </div>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

@@ -1,34 +1,66 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
-import { RefreshCw, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import { useState, useTransition, useRef, useLayoutEffect } from "react";
+import { RefreshCw, CheckCircle2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { revalidateMaterialsAction } from "@/app/actions/reindex";
 
 export default function ReindexButton() {
   const [isPending, startTransition] = useTransition();
-  const [status, setStatus] = useState(null); // 'idle' | 'success' | 'error'
+  const [status, setStatus] = useState(null); // null | 'success' | 'error'
   const [message, setMessage] = useState("");
+  const resetTimerRef = useRef(null);
+  const isActiveRef = useRef(true);
+
+  // Reset transient feedback state when <Activity> hides the route on navigation
+  useLayoutEffect(() => {
+    isActiveRef.current = true;
+    return () => {
+      isActiveRef.current = false;
+      if (resetTimerRef.current) {
+        clearTimeout(resetTimerRef.current);
+        resetTimerRef.current = null;
+      }
+      setStatus(null);
+      setMessage("");
+    };
+  }, []);
+
+  const scheduleReset = () => {
+    if (resetTimerRef.current) {
+      clearTimeout(resetTimerRef.current);
+    }
+    resetTimerRef.current = setTimeout(() => {
+      setStatus(null);
+      setMessage("");
+    }, 5000);
+  };
 
   const handleReindex = () => {
-    if (isPending) return;
+    if (isPending || status === "success") return;
 
-    setStatus("loading");
+    setStatus(null);
     setMessage("");
 
     startTransition(async () => {
-      const res = await revalidateMaterialsAction();
-      if (res?.success) {
-        setStatus("success");
-        setMessage("تم تحديث وفهرسة الملازم بنجاح! تم تجديد الكاش الآن.");
-        setTimeout(() => {
-          setStatus(null);
-        }, 5000);
-      } else {
+      try {
+        const res = await revalidateMaterialsAction();
+        if (!isActiveRef.current) return;
+        if (res?.success) {
+          setStatus("success");
+          setMessage(
+            res.message || "تم تحديث وفهرسة الملازم بنجاح! تم تجديد الكاش الآن."
+          );
+        } else {
+          setStatus("error");
+          setMessage(res?.error || "حدث خطأ أثناء محاولة التحديث");
+        }
+        scheduleReset();
+      } catch {
+        if (!isActiveRef.current) return;
         setStatus("error");
-        setMessage(res?.error || "حدث خطأ أثناء محاولة التحديث");
-        setTimeout(() => {
-          setStatus(null);
-        }, 5000);
+        setMessage("تعذر الاتصال بالخادم أثناء تحديث الفهرس");
+        scheduleReset();
       }
     });
   };
@@ -39,38 +71,46 @@ export default function ReindexButton() {
         <h4 className="text-sm font-bold text-foreground">
           التحديث السريع للفهرس السحابي
         </h4>
+        {message && (
+          <p
+            role="status"
+            aria-live="polite"
+            className={`text-xs font-medium ${
+              status === "error" ? "text-destructive" : "text-emerald-700"
+            }`}
+          >
+            {message}
+          </p>
+        )}
       </div>
 
       <div className="flex flex-col sm:items-end gap-2 shrink-0">
-        <button
+        <Button
           type="button"
           onClick={handleReindex}
-          disabled={isPending || status === "success"}
-          className={`inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg font-bold text-xs sm:text-sm shadow-xs transition-all cursor-pointer ${
+          loading={isPending}
+          disabled={status === "success"}
+          icon={
+            isPending
+              ? undefined
+              : status === "success"
+              ? CheckCircle2
+              : RefreshCw
+          }
+          className={`h-auto md:h-auto px-5 py-2.5 rounded-lg font-bold text-xs sm:text-sm shadow-xs ${
             status === "success"
-              ? "bg-emerald-600 text-white"
+              ? "bg-emerald-600 text-white hover:bg-emerald-600 disabled:opacity-100"
               : status === "error"
-              ? "bg-destructive text-white"
-              : "bg-primary text-primary-foreground hover:bg-primary/90 active:scale-98 disabled:opacity-60"
+              ? "bg-destructive text-white hover:bg-destructive/90"
+              : ""
           }`}
         >
-          {isPending ? (
-            <>
-              <Loader2 className="size-4 animate-spin" />
-              <span>جارٍ الفهرسة...</span>
-            </>
-          ) : status === "success" ? (
-            <>
-              <CheckCircle2 className="size-4" />
-              <span>تم الفهرسة بنجاح!</span>
-            </>
-          ) : (
-            <>
-              <RefreshCw className="size-4" />
-              <span>فهرس الملفات الآن</span>
-            </>
-          )}
-        </button>
+          {isPending
+            ? "جارٍ الفهرسة..."
+            : status === "success"
+            ? "تم الفهرسة بنجاح!"
+            : "فهرس الملفات الآن"}
+        </Button>
       </div>
     </div>
   );

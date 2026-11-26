@@ -1,4 +1,3 @@
-import React from "react";
 import Image from "next/image";
 
 export default function ArticleBanner({ slug, alt = "Article Banner" }) {
@@ -10,7 +9,6 @@ export default function ArticleBanner({ slug, alt = "Article Banner" }) {
         src={bannerSrc}
         alt={alt}
         fill
-        priority
         loading="eager"
         sizes="(max-width: 1024px) 100vw, 896px"
         className="object-cover"

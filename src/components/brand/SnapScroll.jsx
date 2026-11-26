@@ -3,43 +3,34 @@
 import { useEffect, useRef } from "react";
 import { useLenis } from "lenis/react";
 import Snap from "lenis/snap";
+import { useDesktop } from "@/hooks/useDesktop";
 
-export default function SnapScroll({
-  children,
-  enabled = true,
-  type = "mandatory",
-  duration = 1,
-  debounce = 200,
-  align = "start",
-  selector,
-  className,
-  minWidth = 768,
-}) {
+export default function SnapScroll({ children, selector, className }) {
   const lenis = useLenis();
   const containerRef = useRef(null);
+  const isDesktop = useDesktop();
 
   useEffect(() => {
-    if (!enabled || !lenis || !containerRef.current) return;
-    if (window.innerWidth < minWidth) return;
+    if (!isDesktop || !lenis || !containerRef.current) return;
 
     const snap = new Snap(lenis, {
-      type,
-      duration,
-      debounce,
+      type: "mandatory",
+      duration: 1,
+      debounce: 200,
     });
 
     const targets = selector
       ? containerRef.current.querySelectorAll(selector)
       : containerRef.current.children;
 
-    if (targets && targets.length > 0) {
-      snap.addElements(targets, { align });
+    if (targets?.length) {
+      snap.addElements(targets, { align: "start" });
     }
 
     return () => {
       snap.destroy();
     };
-  }, [enabled, lenis, type, duration, debounce, align, selector, minWidth]);
+  }, [isDesktop, lenis, selector]);
 
   return (
     <div ref={containerRef} className={className}>

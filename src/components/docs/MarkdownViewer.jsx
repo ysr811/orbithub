@@ -2,6 +2,7 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { MessageCircle } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 import ReindexButton from "@/components/docs/ReindexButton";
 
 export default function MarkdownViewer({ content }) {
@@ -25,11 +26,23 @@ export default function MarkdownViewer({ content }) {
               {children}
             </h3>
           ),
-          p: ({ children }) => (
-            <p className="text-sm sm:text-base text-foreground/85 leading-relaxed mb-4">
-              {children}
-            </p>
-          ),
+          p: ({ node, children }) => {
+            const singleChild =
+              node?.children?.length === 1 ? node.children[0] : null;
+            if (
+              singleChild?.type === "element" &&
+              singleChild?.tagName === "a" &&
+              singleChild?.properties?.href === "#reindex"
+            ) {
+              return <ReindexButton />;
+            }
+
+            return (
+              <p className="text-sm sm:text-base text-foreground/85 leading-relaxed mb-4">
+                {children}
+              </p>
+            );
+          },
           ul: ({ children }) => (
             <ul className="list-disc list-outside mr-5 space-y-2 mb-5 text-sm sm:text-base text-foreground/85">
               {children}
@@ -40,17 +53,13 @@ export default function MarkdownViewer({ content }) {
               {children}
             </ol>
           ),
-          li: ({ children }) => (
-            <li className="leading-relaxed">
-              {children}
-            </li>
-          ),
+          li: ({ children }) => <li className="leading-relaxed">{children}</li>,
           blockquote: ({ children }) => (
             <blockquote className="bg-yellow-100/50 py-3 px-4 rounded-lg my-5 text-sm sm:text-base text-foreground/90 font-medium leading-relaxed">
               {children}
             </blockquote>
           ),
-          pre: ({ node, children, ...props }) => (
+          pre: ({ children, ...props }) => (
             <pre
               dir="ltr"
               className="rounded-2xl bg-card border border-border p-4 overflow-x-auto text-xs sm:text-sm font-mono my-5 text-foreground shadow-2xs"
@@ -59,8 +68,12 @@ export default function MarkdownViewer({ content }) {
               {children}
             </pre>
           ),
-          code: ({ node, className, children, ...props }) => {
-            const isBlock = Boolean(className) || (typeof children === "string" && children.includes("\n"));
+          code: ({ className, children, ...props }) => {
+            const hasNewline = React.Children.toArray(children).some(
+              (child) => typeof child === "string" && child.includes("\n")
+            );
+            const isBlock = Boolean(className) || hasNewline;
+
             if (!isBlock) {
               return (
                 <code
@@ -91,9 +104,7 @@ export default function MarkdownViewer({ content }) {
             </thead>
           ),
           tbody: ({ children }) => (
-            <tbody className="divide-y divide-border/60">
-              {children}
-            </tbody>
+            <tbody className="divide-y divide-border/60">{children}</tbody>
           ),
           th: ({ children }) => (
             <th className="p-3 sm:p-3.5 font-bold text-foreground">
@@ -101,18 +112,14 @@ export default function MarkdownViewer({ content }) {
             </th>
           ),
           td: ({ children }) => (
-            <td className="p-3 sm:p-3.5 text-foreground/85">
-              {children}
-            </td>
+            <td className="p-3 sm:p-3.5 text-foreground/85">{children}</td>
           ),
-          hr: () => (
-            <hr className="border-border/60 my-8" />
-          ),
+          hr: () => <Separator className="my-8" />,
           a: ({ href, children }) => {
-            if (href === "#reindex") {
-              return <ReindexButton />;
+            if (!href) {
+              return <span>{children}</span>;
             }
-            if (href?.startsWith("https://wa.me")) {
+            if (href.startsWith("https://wa.me")) {
               return (
                 <a
                   href={href}
@@ -128,8 +135,8 @@ export default function MarkdownViewer({ content }) {
             return (
               <a
                 href={href}
-                target={href?.startsWith("#") ? "_self" : "_blank"}
-                rel={href?.startsWith("#") ? undefined : "noopener noreferrer"}
+                target={href.startsWith("#") ? "_self" : "_blank"}
+                rel={href.startsWith("#") ? undefined : "noopener noreferrer"}
                 className="text-primary hover:underline font-semibold"
               >
                 {children}

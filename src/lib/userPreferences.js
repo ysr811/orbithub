@@ -1,66 +1,77 @@
-export const STORAGE_KEY = "user_preferences";
+const PREFERENCES_KEY = "user_preferences";
+const FILTERS_KEY = "materials_filters";
 
-export const STORAGE_KEYS = {
-  USER_PREFERENCES: STORAGE_KEY,
-};
+export const EMPTY_PREFERENCES = Object.freeze({
+  major: "",
+  level: "",
+  semester: "",
+});
 
-// Safe JSON parser for localStorage
-function getRawPreferences() {
-  if (typeof window === "undefined") return {};
+export const EMPTY_FILTERS = Object.freeze({
+  major: "",
+  level: "",
+  semester: "",
+  subject: "",
+  instructor: "",
+});
+
+function readJson(key) {
+  if (typeof window === "undefined") return null;
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
-
-    const major = localStorage.getItem("user_major");
-    const level = localStorage.getItem("user_level");
-    const semester = localStorage.getItem("user_semester");
-    const onboarding = localStorage.getItem("onboarding_completed");
-    if (major || level || semester || onboarding) {
-      return {
-        major: major || "",
-        level: level || "",
-        semester: semester || "",
-        onboarding_completed: onboarding === "true",
-      };
-    }
-    return {};
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : null;
   } catch {
-    return {};
+    return null;
   }
 }
 
-// Safe JSON serializer for localStorage
-function saveRawPreferences(data) {
+function writeJson(key, value) {
   if (typeof window === "undefined") return;
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    localStorage.setItem(key, JSON.stringify(value));
   } catch {
     // Ignore storage quota or disabled localStorage errors
   }
 }
 
+function removeKey(key) {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.removeItem(key);
+  } catch {
+    // Ignore disabled localStorage errors
+  }
+}
+
+export function normalizeFilters(raw) {
+  return {
+    major: raw?.major ? String(raw.major).toLowerCase() : "",
+    level: raw?.level ? String(raw.level) : "",
+    semester: raw?.semester ? String(raw.semester) : "",
+    subject: raw?.subject ? String(raw.subject) : "",
+    instructor: raw?.instructor ? String(raw.instructor) : "",
+  };
+}
+
 export function isOnboardingCompleted() {
-  if (typeof window === "undefined") return true;
-  const prefs = getRawPreferences();
-  return Boolean(prefs.onboarding_completed);
+  return Boolean(readJson(PREFERENCES_KEY)?.onboarding_completed);
 }
 
 export function setOnboardingCompleted(completed = true) {
-  if (typeof window === "undefined") return;
-  const prefs = getRawPreferences();
+  const prefs = readJson(PREFERENCES_KEY) || {};
   if (completed) {
     prefs.onboarding_completed = true;
   } else {
     delete prefs.onboarding_completed;
   }
-  saveRawPreferences(prefs);
+  writeJson(PREFERENCES_KEY, prefs);
 }
 
 export function getUserPreferences() {
-  if (typeof window === "undefined") return { major: "", level: "", semester: "" };
-  const prefs = getRawPreferences();
+  const prefs = readJson(PREFERENCES_KEY);
+  if (!prefs) return EMPTY_PREFERENCES;
   return {
-    major: prefs.major ? String(prefs.major) : "",
+    major: prefs.major ? String(prefs.major).toLowerCase() : "",
     level: prefs.level ? String(prefs.level) : "",
     semester: prefs.semester ? String(prefs.semester) : "",
   };
@@ -68,23 +79,74 @@ export function getUserPreferences() {
 
 export function setUserPreferences({ major, level, semester }) {
   if (typeof window === "undefined") return;
-  const prefs = getRawPreferences();
+  const prevPrefs = getUserPreferences();
+  const prefs = readJson(PREFERENCES_KEY) || {};
 
-  if (major) prefs.major = String(major);
+  const nextMajor = major ? String(major).toLowerCase() : "";
+  const nextLevel = level ? String(level) : "";
+  const nextSemester = semester ? String(semester) : "";
+
+  if (nextMajor) prefs.major = nextMajor;
   else delete prefs.major;
 
-  if (level) prefs.level = String(level);
+  if (nextLevel) prefs.level = nextLevel;
   else delete prefs.level;
 
-  if (semester) prefs.semester = String(semester);
+  if (nextSemester) prefs.semester = nextSemester;
   else delete prefs.semester;
 
-  saveRawPreferences(prefs);
+  writeJson(PREFERENCES_KEY, prefs);
+
+  // Clear stale subject/instructor when academic scope changes
+  const scopeChanged =
+    prevPrefs.major !== nextMajor ||
+    prevPrefs.level !== nextLevel ||
+    prevPrefs.semester !== nextSemester;
+
+  if (scopeChanged) {
+    const savedFilters = getSavedMaterialsFilters();
+    if (savedFilters) {
+      saveMaterialsFilters({
+        ...savedFilters,
+        major: nextMajor,
+        level: nextLevel,
+        semester: nextSemester,
+        subject: "",
+        instructor: "",
+      });
+    }
+  }
+
   window.dispatchEvent(new Event("preferences_updated"));
 }
 
-export function resetUserPreferences() {
-  if (typeof window === "undefined") return;
-  localStorage.removeItem(STORAGE_KEY);
-  window.dispatchEvent(new Event("preferences_updated"));
+export function getSavedMaterialsFilters() {
+  const parsed = readJson(FILTERS_KEY);
+  return parsed ? normalizeFilters(parsed) : null;
+}
+
+export function saveMaterialsFilters(filters) {
+  const normalized = normalizeFilters(filters);
+  const hasValues = Object.values(normalized).some(Boolean);
+
+  if (!hasValues) {
+    removeKey(FILTERS_KEY);
+  } else {
+    writeJson(FILTERS_KEY, normalized);
+  }
+
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event("materials_filters_updated"));
+  }
+}
+
+export function subscribeStorageKey(eventName, callback) {
+  if (typeof window === "undefined") return () => {};
+  const handler = () => callback();
+  window.addEventListener(eventName, handler);
+  window.addEventListener("storage", handler);
+  return () => {
+    window.removeEventListener(eventName, handler);
+    window.removeEventListener("storage", handler);
+  };
 }

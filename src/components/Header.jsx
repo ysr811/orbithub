@@ -11,7 +11,6 @@ import PreferencesModal from "@/components/PreferencesModal";
 
 const navLinks = [
   { name: "الرئيسية", href: "/" },
-  { name: "الجدول", href: "/schedule" },
   { name: "الملازم", href: "/materials" },
   { name: "المقالات", href: "/decs" },
   { name: "الهوية", href: "/brand" },
@@ -21,59 +20,64 @@ export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [scrollState, setScrollState] = useState({
+    visible: true,
+    scrolled: false,
+    path: pathname,
+  });
 
   useEffect(() => {
-    let lastScrollY = typeof window !== "undefined" ? window.scrollY : 0;
+    let lastScrollY = window.scrollY;
     let ticking = false;
 
     const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const currentScrollY = Math.max(0, window.scrollY);
-          const deltaY = currentScrollY - lastScrollY;
+      if (ticking) return;
+      ticking = true;
 
-          // Always visible and transparent at the very top of the page
+      window.requestAnimationFrame(() => {
+        const currentScrollY = Math.max(0, window.scrollY);
+        const deltaY = currentScrollY - lastScrollY;
+
+        setScrollState((prev) => {
+          const samePath = prev.path === pathname;
           if (currentScrollY <= 20) {
-            setIsVisible(true);
-            setIsScrolled(false);
-          } else {
-            setIsScrolled(true);
-
-            // Hide when scrolling downwards with intent
-            if (deltaY > 6 && currentScrollY > 80) {
-              setIsVisible(false);
-            }
-            // Show immediately when scrolling upwards with intent / acceleration
-            else if (deltaY < -6) {
-              setIsVisible(true);
-            }
+            if (samePath && prev.visible && !prev.scrolled) return prev;
+            return { visible: true, scrolled: false, path: pathname };
           }
 
-          lastScrollY = currentScrollY;
-          ticking = false;
+          let nextVisible = samePath ? prev.visible : true;
+          if (deltaY > 6 && currentScrollY > 80) {
+            nextVisible = false;
+          } else if (deltaY < -6) {
+            nextVisible = true;
+          }
+
+          if (samePath && prev.visible === nextVisible && prev.scrolled) {
+            return prev;
+          }
+          return { visible: nextVisible, scrolled: true, path: pathname };
         });
-        ticking = true;
-      }
+
+        lastScrollY = currentScrollY;
+        ticking = false;
+      });
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Reset header visibility on route change
-  useEffect(() => {
-    setIsVisible(true);
-    setIsScrolled(false);
   }, [pathname]);
 
-  // Keep header visible while preferences modal is active
-  useEffect(() => {
-    if (isPreferencesOpen) {
-      setIsVisible(true);
-    }
-  }, [isPreferencesOpen]);
+  const isCurrentPath = scrollState.path === pathname;
+  const isScrolled = isCurrentPath ? scrollState.scrolled : false;
+  const isVisible =
+    isPreferencesOpen || (isCurrentPath ? scrollState.visible : true);
+
+  const activeHref =
+    navLinks.find(
+      (link) =>
+        pathname === link.href ||
+        (link.href !== "/" && pathname?.startsWith(link.href))
+    )?.href ?? "";
 
   return (
     <header
@@ -82,7 +86,7 @@ export default function Header() {
         "sticky top-0 z-50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 transition-all duration-300 ease-in-out",
         isVisible ? "translate-y-0" : "-translate-y-full",
         isScrolled
-          ? "bg-background/85 backdrop-blur-md border-b border-border/50 shadow-2xs"
+          ? "bg-background border-b border-border/50 shadow-2xs"
           : "bg-transparent border-b border-transparent shadow-none"
       )}
     >
@@ -94,7 +98,7 @@ export default function Header() {
             alt="Orbit Logo"
             width={120}
             height={36}
-            priority
+            loading="eager"
             className="h-8 w-auto object-contain lg:block hidden"
           />
           <Image
@@ -102,7 +106,7 @@ export default function Header() {
             alt="Orbit Logo"
             width={120}
             height={36}
-            priority
+            loading="eager"
             className="h-8 w-auto object-contain lg:hidden block"
           />
         </Link>
@@ -110,8 +114,7 @@ export default function Header() {
         {/* Navigation Links - Medium & Large Screens */}
         <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-8 text-sm font-cairo">
           {navLinks.map((link) => {
-            const isActive =
-              pathname === link.href || (link.href !== "/" && pathname?.startsWith(link.href));
+            const isActive = link.href === activeHref;
             return (
               <Link
                 key={link.href}
@@ -135,34 +138,27 @@ export default function Header() {
             onClick={() => setIsPreferencesOpen(true)}
             title="تحديد أو تغيير مستواك الدراسي"
             aria-label="تحديد أو تغيير مستواك الدراسي"
-            className="size-12 md:size-9 rounded-2xl md:rounded-xl border-border/80 text-foreground/90 hover:text-foreground bg-white hover:bg-muted shadow-xs cursor-pointer active:scale-95 transition-all"
+            className="rounded-2xl md:rounded-xl border-border/80 text-foreground/90 hover:text-foreground bg-white hover:bg-muted shadow-xs active:scale-95"
           >
-            <SlidersHorizontal className="size-6 md:size-4" strokeWidth={2} />
+            <SlidersHorizontal strokeWidth={2} />
           </Button>
 
-          <Button className="hidden lg:flex" render={<Link href="/schedule" />} size="sm">
-            فتح الجدول
+          <Button className="hidden lg:flex" render={<Link href="/materials" />} size="sm">
+            تصفح الملازم
           </Button>
 
           {/* Mobile Native OS Navigation (Leverages OS-native Picker / Action Sheet) */}
           <div className="relative md:hidden size-12 sm:size-11">
-            <div
-              className="size-12 sm:size-11 rounded-2xl sm:rounded-xl border border-border/80 text-foreground/90 bg-white hover:bg-muted shadow-xs flex items-center justify-center cursor-pointer active:scale-95 transition-all pointer-events-none"
-              aria-hidden="true"
-            >
-              <Menu className="size-6.5 sm:size-6" strokeWidth={2.2} />
-            </div>
-
             <select
               aria-label="قائمة التنقل السريع"
-              value={navLinks.some((l) => l.href === pathname) ? pathname : ""}
+              value={activeHref}
               onChange={(e) => {
                 const targetPath = e.target.value;
                 if (targetPath && targetPath !== pathname) {
                   router.push(targetPath);
                 }
               }}
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none z-10 text-base"
+              className="peer absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none z-10 text-base"
             >
               <option value="" disabled hidden>
                 الانتقال إلى...
@@ -173,6 +169,13 @@ export default function Header() {
                 </option>
               ))}
             </select>
+
+            <div
+              className="size-12 sm:size-11 rounded-2xl sm:rounded-xl border border-border/80 text-foreground/90 bg-white hover:bg-muted shadow-xs flex items-center justify-center transition-all pointer-events-none peer-focus-visible:ring-3 peer-focus-visible:ring-ring/50 peer-focus-visible:border-ring"
+              aria-hidden="true"
+            >
+              <Menu className="size-6.5 sm:size-6" strokeWidth={2.2} />
+            </div>
           </div>
         </div>
       </div>

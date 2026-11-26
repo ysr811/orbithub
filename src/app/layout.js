@@ -16,14 +16,9 @@ const museoModerno = MuseoModerno({
 });
 
 export const metadata = {
-  title: "Orbit",
-  description: "Next.js project with Cairo & Museo Moderno fonts",
-  icons: {
-    icon: [
-      { url: "/favicon.svg", type: "image/svg+xml" },
-      { url: "/icon.svg", type: "image/svg+xml" },
-    ],
-  },
+  title: "OrbitHub | البوابة الأكاديمية لكلية الحاسبات وتقنية المعلومات",
+  description:
+    "البوابة الأكاديمية الموحدة لطلاب كلية الحاسبات وتقنية المعلومات بجامعة حضرموت — المقررات والملازم الدراسية في مكان واحد منظم.",
 };
 
 export default function RootLayout({ children }) {

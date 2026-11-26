@@ -1,125 +1,198 @@
 "use client";
 
-import { useState, useMemo, useDeferredValue, useCallback, useEffect } from "react";
-import { getUserPreferences } from "@/lib/userPreferences";
+import {
+  useState,
+  useMemo,
+  useDeferredValue,
+  useCallback,
+  useSyncExternalStore,
+} from "react";
+import {
+  EMPTY_PREFERENCES,
+  EMPTY_FILTERS,
+  getUserPreferences,
+  getSavedMaterialsFilters,
+  saveMaterialsFilters,
+  subscribeStorageKey,
+} from "@/lib/userPreferences";
 
-const INITIAL_FILTERS = {
-  major: "",
-  level: "",
-  semester: "",
-  subject: "",
-  instructor: "",
-};
+const CASCADE_KEYS = ["major", "level", "semester", "subject", "instructor"];
+
+// Module-level snapshot caches preserve referential stability for useSyncExternalStore
+let cachedPrefsRaw = null;
+let cachedPrefsObj = EMPTY_PREFERENCES;
+
+function getPreferencesSnapshot() {
+  const next = getUserPreferences();
+  const serialized = JSON.stringify(next);
+  if (serialized !== cachedPrefsRaw) {
+    cachedPrefsRaw = serialized;
+    cachedPrefsObj = next;
+  }
+  return cachedPrefsObj;
+}
+
+let cachedFiltersRaw = null;
+let cachedFiltersObj = EMPTY_FILTERS;
+
+function getFiltersSnapshot() {
+  const next = getSavedMaterialsFilters() || EMPTY_FILTERS;
+  const serialized = JSON.stringify(next);
+  if (serialized !== cachedFiltersRaw) {
+    cachedFiltersRaw = serialized;
+    cachedFiltersObj = next;
+  }
+  return cachedFiltersObj;
+}
+
+function subscribePreferences(cb) {
+  return subscribeStorageKey("preferences_updated", cb);
+}
+
+function subscribeFilters(cb) {
+  return subscribeStorageKey("materials_filters_updated", cb);
+}
+
+/**
+ * Shared academic scope matcher used by filtering and empty-state checks.
+ */
+export function matchesScope(item, scope) {
+  if (
+    scope.major &&
+    item.major &&
+    item.major.toLowerCase() !== scope.major.toLowerCase()
+  ) {
+    return false;
+  }
+  if (scope.level && item.level !== Number(scope.level)) return false;
+  if (scope.semester && item.semester !== Number(scope.semester)) return false;
+  return true;
+}
 
 export function useMaterialsFilter(summaries = []) {
-  const [filters, setFilters] = useState(INITIAL_FILTERS);
-  const [savedPreferences, setSavedPreferences] = useState({ major: "", level: "", semester: "" });
+  const savedPreferences = useSyncExternalStore(
+    subscribePreferences,
+    getPreferencesSnapshot,
+    () => EMPTY_PREFERENCES
+  );
+  const storedFilters = useSyncExternalStore(
+    subscribeFilters,
+    getFiltersSnapshot,
+    () => EMPTY_FILTERS
+  );
+
   const [searchQuery, setSearchQuery] = useState("");
-  const [isFiltersOpen, setIsFiltersOpen] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  // Synchronize filters with user's saved preferences
-  useEffect(() => {
-    const applySaved = () => {
-      const { major, level, semester } = getUserPreferences();
-      const cleanMajor = major ? String(major).toLowerCase() : "";
-      const cleanLevel = level ? String(level) : "";
-      const cleanSemester = semester ? String(semester) : "";
-      setSavedPreferences({ major: cleanMajor, level: cleanLevel, semester: cleanSemester });
-      setFilters((prev) => ({
-        ...prev,
-        major: cleanMajor || prev.major,
-        level: cleanLevel || prev.level,
-        semester: cleanSemester || prev.semester,
-      }));
+  // Merge locked saved preferences with persisted filter overrides and prune invalid dataset values
+  const filters = useMemo(() => {
+    const resolvedMajor = savedPreferences.major || storedFilters.major || "";
+    const resolvedLevel = savedPreferences.level || storedFilters.level || "";
+    const resolvedSemester =
+      savedPreferences.semester || storedFilters.semester || "";
+
+    const scopeMismatch =
+      Boolean(
+        savedPreferences.major &&
+          storedFilters.major &&
+          savedPreferences.major !== storedFilters.major
+      ) ||
+      Boolean(
+        savedPreferences.level &&
+          storedFilters.level &&
+          savedPreferences.level !== storedFilters.level
+      ) ||
+      Boolean(
+        savedPreferences.semester &&
+          storedFilters.semester &&
+          savedPreferences.semester !== storedFilters.semester
+      );
+
+    let validSubject = scopeMismatch ? "" : storedFilters.subject || "";
+    let validInstructor = scopeMismatch ? "" : storedFilters.instructor || "";
+
+    if (summaries.length > 0 && (validSubject || validInstructor)) {
+      const scopeItems = summaries.filter((item) =>
+        matchesScope(item, {
+          major: resolvedMajor,
+          level: resolvedLevel,
+          semester: resolvedSemester,
+        })
+      );
+
+      if (validSubject && !scopeItems.some((item) => item.subject === validSubject)) {
+        validSubject = "";
+        validInstructor = "";
+      } else if (
+        validInstructor &&
+        !scopeItems.some(
+          (item) =>
+            (!validSubject || item.subject === validSubject) &&
+            item.instructor === validInstructor
+        )
+      ) {
+        validInstructor = "";
+      }
+    }
+
+    return {
+      major: resolvedMajor,
+      level: resolvedLevel,
+      semester: resolvedSemester,
+      subject: validSubject,
+      instructor: validInstructor,
     };
+  }, [summaries, savedPreferences, storedFilters]);
 
-    applySaved();
-    window.addEventListener("preferences_updated", applySaved);
-    return () => window.removeEventListener("preferences_updated", applySaved);
-  }, []);
-
-  // Responsive search query with deferred value for performance
   const deferredSearch = useDeferredValue(searchQuery.trim().toLowerCase());
 
-  // Filter setters
-  const setMajor = useCallback((major) => {
-    setFilters((prev) => ({
-      ...prev,
-      major: major ? String(major).toLowerCase() : "",
-      level: "",
-      semester: "",
-      subject: "",
-      instructor: "",
-    }));
-  }, []);
+  const updateFilter = useCallback(
+    (key, value) => {
+      const idx = CASCADE_KEYS.indexOf(key);
+      if (idx === -1) return;
 
-  const setLevel = useCallback((level) => {
-    setFilters((prev) => ({
-      ...prev,
-      level: level ? String(level) : "",
-      semester: "",
-      subject: "",
-      instructor: "",
-    }));
-  }, []);
+      const next = { ...filters };
+      next[key] =
+        key === "major" && value ? String(value).toLowerCase() : String(value || "");
 
-  const setSemester = useCallback((semester) => {
-    setFilters((prev) => ({
-      ...prev,
-      semester: semester ? String(semester) : "",
-      subject: "",
-      instructor: "",
-    }));
-  }, []);
+      for (let i = idx + 1; i < CASCADE_KEYS.length; i += 1) {
+        const childKey = CASCADE_KEYS[i];
+        next[childKey] = savedPreferences[childKey] || "";
+      }
 
-  const setSubject = useCallback((subject) => {
-    setFilters((prev) => ({
-      ...prev,
-      subject: subject || "",
-      instructor: "",
-    }));
-  }, []);
+      saveMaterialsFilters(next);
+    },
+    [filters, savedPreferences]
+  );
 
-  const setInstructor = useCallback((instructor) => {
-    setFilters((prev) => ({
-      ...prev,
-      instructor: instructor || "",
-    }));
-  }, []);
+  const setMajor = useCallback((v) => updateFilter("major", v), [updateFilter]);
+  const setLevel = useCallback((v) => updateFilter("level", v), [updateFilter]);
+  const setSemester = useCallback((v) => updateFilter("semester", v), [updateFilter]);
+  const setSubject = useCallback((v) => updateFilter("subject", v), [updateFilter]);
+  const setInstructor = useCallback(
+    (v) => updateFilter("instructor", v),
+    [updateFilter]
+  );
 
-  const clearFilter = useCallback((key) => {
-    if (key === "major") {
-      setMajor("");
-    } else if (key === "level") {
-      setLevel("");
-    } else if (key === "semester") {
-      setSemester("");
-    } else if (key === "subject") {
-      setSubject("");
-    } else if (key === "instructor") {
-      setInstructor("");
-    } else if (key === "search") {
-      setSearchQuery("");
-    }
-  }, [setMajor, setLevel, setSemester, setSubject, setInstructor]);
+  const clearFilter = useCallback(
+    (key) => {
+      if (key === "search") {
+        setSearchQuery("");
+      } else {
+        updateFilter(key, "");
+      }
+    },
+    [updateFilter]
+  );
 
-  // Reset transient filters back to default saved preferences
   const resetAll = useCallback(() => {
-    setFilters({
-      major: savedPreferences.major || "",
-      level: savedPreferences.level || "",
-      semester: savedPreferences.semester || "",
-      subject: "",
-      instructor: "",
-    });
+    saveMaterialsFilters(EMPTY_FILTERS);
     setSearchQuery("");
-  }, [savedPreferences]);
+  }, []);
 
-  // Derived options for dropdowns based on current scope
   const options = useMemo(() => {
     const majorFiltered = filters.major
-      ? summaries.filter((s) => !s.major || s.major.toLowerCase() === filters.major.toLowerCase())
+      ? summaries.filter((s) => matchesScope(s, { major: filters.major }))
       : summaries;
 
     const levels = [...new Set(majorFiltered.map((s) => s.level))]
@@ -140,7 +213,7 @@ export function useMaterialsFilter(summaries = []) {
 
     const subjects = [...new Set(semesterFiltered.map((s) => s.subject))]
       .filter(Boolean)
-      .sort();
+      .sort((a, b) => a.localeCompare(b, "ar"));
 
     const subjectFiltered = filters.subject
       ? semesterFiltered.filter((s) => s.subject === filters.subject)
@@ -148,24 +221,29 @@ export function useMaterialsFilter(summaries = []) {
 
     const instructors = [...new Set(subjectFiltered.map((s) => s.instructor))]
       .filter(Boolean)
-      .sort();
+      .sort((a, b) => a.localeCompare(b, "ar"));
 
     return { levels, semesters, subjects, instructors };
-  }, [summaries, filters.major, filters.level, filters.semester, filters.subject]);
+  }, [
+    summaries,
+    filters.major,
+    filters.level,
+    filters.semester,
+    filters.subject,
+  ]);
 
-  // Filtered materials
   const filteredSummaries = useMemo(() => {
     return summaries.filter((item) => {
-      if (filters.major && item.major && item.major.toLowerCase() !== filters.major.toLowerCase()) return false;
-      if (filters.level && item.level !== Number(filters.level)) return false;
-      if (filters.semester && item.semester !== Number(filters.semester)) return false;
+      if (!matchesScope(item, filters)) return false;
       if (filters.subject && item.subject !== filters.subject) return false;
       if (filters.instructor && item.instructor !== filters.instructor) return false;
 
       if (deferredSearch) {
         const titleMatch = item.title?.toLowerCase().includes(deferredSearch);
         const subjectMatch = item.subject?.toLowerCase().includes(deferredSearch);
-        const instructorMatch = item.instructor?.toLowerCase().includes(deferredSearch);
+        const instructorMatch = item.instructor
+          ?.toLowerCase()
+          .includes(deferredSearch);
         return Boolean(titleMatch || subjectMatch || instructorMatch);
       }
 
@@ -173,7 +251,6 @@ export function useMaterialsFilter(summaries = []) {
     });
   }, [summaries, filters, deferredSearch]);
 
-  // Active filter count (counts user-applied transient filters)
   const activeFilterCount = useMemo(() => {
     let count = 0;
     if (filters.major && !savedPreferences.major) count += 1;
@@ -185,14 +262,10 @@ export function useMaterialsFilter(summaries = []) {
     return count;
   }, [filters, searchQuery, savedPreferences]);
 
-  const hasActiveFilters = activeFilterCount > 0;
-
   return {
     filters,
     searchQuery,
     setSearchQuery,
-    isFiltersOpen,
-    setIsFiltersOpen,
     isDrawerOpen,
     setIsDrawerOpen,
     setMajor,
@@ -206,7 +279,7 @@ export function useMaterialsFilter(summaries = []) {
     filteredSummaries,
     totalCount: summaries.length,
     activeFilterCount,
-    hasActiveFilters,
+    hasActiveFilters: activeFilterCount > 0,
     isSearching: searchQuery.trim().toLowerCase() !== deferredSearch,
     savedPreferences,
   };

@@ -11,7 +11,7 @@ export default function Loading() {
         alt="Orbit Logo"
         width={96}
         height={96}
-        priority
+        loading="eager"
         className="size-20 animate-spin object-contain select-none"
       />
       <p className="font-cairo text-sm text-muted-foreground animate-pulse font-medium">

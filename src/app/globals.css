@@ -8,13 +8,6 @@
   --font-cairo: var(--font-cairo), sans-serif;
   --font-museo: var(--font-museo), sans-serif;
 
-  --color-brand-dark: #0E0F28;
-  --color-brand-surface: #26273E;
-  --color-brand-muted: #3E3F53;
-  --color-brand-light: #E4E5F2;
-  --color-brand-secondary: #7A89EA;
-  --color-brand-primary: #2A3EF4;
-
   --color-c-dark: #0E0F28;
   --color-c-navy: #26273E;
   --color-c-slate: #3E3F53;
@@ -44,14 +37,6 @@
   --input: #D8DAEB;
   --ring: #2A3EF4;
   --radius: 0.75rem;
-  --sidebar: #FFFFFF;
-  --sidebar-foreground: #0E0F28;
-  --sidebar-primary: #2A3EF4;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #EEF0F9;
-  --sidebar-accent-foreground: #0E0F28;
-  --sidebar-border: #D8DAEB;
-  --sidebar-ring: #2A3EF4;
 }
 
 .dark {
@@ -92,14 +77,6 @@ body {
 @theme inline {
   --font-heading: var(--font-cairo);
   --font-sans: var(--font-cairo);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);

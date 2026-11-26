@@ -21,7 +21,7 @@ export default function NotFound() {
         </p>
           <Button
             render={<Link href="/" />}
-            className="pt-2"
+            className="mt-2"
           >
             العودة للرئيسية
           </Button>

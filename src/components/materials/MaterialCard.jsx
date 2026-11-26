@@ -1,4 +1,3 @@
-import React from "react";
 import {
   FileText,
   FileSpreadsheet,
@@ -70,6 +69,22 @@ function getFileFormatMeta(mimeType) {
   };
 }
 
+function getDriveUrls(driveId, mimeType) {
+  const viewUrl = `https://drive.google.com/file/d/${driveId}/view`;
+  const type = mimeType ? String(mimeType).toLowerCase() : "";
+
+  let downloadUrl = `https://drive.google.com/uc?id=${driveId}&export=download`;
+  if (type === "application/vnd.google-apps.document") {
+    downloadUrl = `https://docs.google.com/document/d/${driveId}/export?format=pdf`;
+  } else if (type === "application/vnd.google-apps.presentation") {
+    downloadUrl = `https://docs.google.com/presentation/d/${driveId}/export/pdf`;
+  } else if (type === "application/vnd.google-apps.spreadsheet") {
+    downloadUrl = `https://docs.google.com/spreadsheets/d/${driveId}/export?format=xlsx`;
+  }
+
+  return { viewUrl, downloadUrl };
+}
+
 function cleanFileTitle(title) {
   if (!title) return "";
   return String(title).replace(/\.(pdf|docx?|pptx?|xlsx?|png|jpe?g)$/i, "");
@@ -79,19 +94,18 @@ export default function MaterialCard({ file }) {
   const format = getFileFormatMeta(file.mimeType);
   const IconComponent = format.icon;
   const displayTitle = cleanFileTitle(file.title);
+  const { viewUrl, downloadUrl } = getDriveUrls(file.driveId, file.mimeType);
 
   return (
     <div className="group relative flex flex-col justify-between rounded-xl border border-border bg-card p-3 lg:p-5 text-foreground font-cairo cursor-pointer hover:border-primary/40 hover:shadow-xs transition-all duration-150">
-      {/* Stretched link covering the entire card to trigger preview on click */}
       <a
-        href={file.viewUrl}
+        href={viewUrl}
         target="_blank"
         rel="noopener noreferrer"
         className="absolute inset-0 z-0 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         aria-label={`معاينة ${displayTitle}`}
       />
 
-      {/* Card Content (clicks pass through to stretched link) */}
       <div className="relative z-1 pointer-events-none">
         <div className="flex items-start justify-between gap-3">
           <div
@@ -105,8 +119,12 @@ export default function MaterialCard({ file }) {
             dir="ltr"
           >
             <span>{format.label}</span>
-            <span>•</span>
-            <span>{file.sizeMB} MB</span>
+            {file.sizeMB && (
+              <>
+                <span>•</span>
+                <span>{file.sizeMB} MB</span>
+              </>
+            )}
           </div>
         </div>
 
@@ -115,12 +133,12 @@ export default function MaterialCard({ file }) {
             {file.subject}
           </span>
 
-          <h3
+          <h2
             className="mt-1 line-clamp-2 min-h-10 text-sm font-bold leading-relaxed text-foreground group-hover:text-primary transition-colors"
             title={file.title}
           >
             {displayTitle}
-          </h3>
+          </h2>
         </div>
 
         <div className="flex items-center gap-1 text-xs text-muted-foreground min-w-0">
@@ -138,12 +156,11 @@ export default function MaterialCard({ file }) {
         </div>
       </div>
 
-      {/* Download Action (elevated z-index to handle independently from card click) */}
       <div className="relative z-10 pt-4">
         <Button
           render={
             <a
-              href={file.downloadUrl}
+              href={downloadUrl}
               target="_blank"
               rel="noopener noreferrer"
             />
