@@ -12,7 +12,6 @@ function getFileFormatMeta(mimeType) {
 
   if (type.includes("pdf")) {
     return {
-      label: "PDF",
       icon: FileText,
       colorClass: "text-red-500 bg-red-500/10",
     };
@@ -24,7 +23,6 @@ function getFileFormatMeta(mimeType) {
     type.includes("pptx")
   ) {
     return {
-      label: "PPTX",
       icon: FileSpreadsheet,
       colorClass: "text-amber-500 bg-amber-500/10",
     };
@@ -36,7 +34,6 @@ function getFileFormatMeta(mimeType) {
     type.includes("docx")
   ) {
     return {
-      label: "DOCX",
       icon: FileText,
       colorClass: "text-blue-500 bg-blue-500/10",
     };
@@ -48,7 +45,6 @@ function getFileFormatMeta(mimeType) {
     type.includes("xlsx")
   ) {
     return {
-      label: "XLSX",
       icon: FileSpreadsheet,
       colorClass: "text-emerald-500 bg-emerald-500/10",
     };
@@ -56,14 +52,12 @@ function getFileFormatMeta(mimeType) {
 
   if (type.includes("image")) {
     return {
-      label: "IMG",
       icon: FileImage,
       colorClass: "text-purple-500 bg-purple-500/10",
     };
   }
 
   return {
-    label: "FILE",
     icon: File,
     colorClass: "text-muted-foreground bg-muted",
   };
@@ -87,48 +81,45 @@ function getDriveUrls(driveId, mimeType) {
 
 function cleanFileTitle(title) {
   if (!title) return "";
-  return String(title).replace(/\.(pdf|docx?|pptx?|xlsx?|png|jpe?g)$/i, "");
+  return String(title)
+    .replace(/\.(pdf|docx?|pptx?|xlsx?|png|jpe?g)$/i, "")
+    .replace(/_/g, " ");
 }
+
+const PHRASE_RULES = [
+  [/\badvanced software design\s*(&|and)\s*development\b/gi, "Adv. SW Design"],
+  [/\bcomputer organization\s*(&|and)\s*architecture\b/gi, "Comp. Org"],
+  [/\bfundamentals of computer networks\b/gi, "Comp. Networks"],
+  [/\bintroduction to (probability|statistics|statics)\s*(&|and)\s*(probability|statistics|statics)\b/gi, "Prob. & Stat."],
+  [/\bmobile application development\b/gi, "Mobile App Dev"],
+  [/\bobject[- ]oriented programming\b/gi, "OOP"],
+  [/\bdecision support systems?\b/gi, "DSS"],
+  [/\bdatabase administration\b/gi, "DB Admin"],
+  [/\bartificial intelligence\b/gi, "AI"],
+  [/\btheory of computation\b/gi, "Theory of Comp."],
+  [/\bsoftware engineering\b/gi, "Software Eng."],
+  [/\bcomputer programming\b/gi, "Comp. Prog."],
+  [/\bvisual programming\b/gi, "Visual Prog."],
+  [/\bdifferential calculus\b/gi, "Diff. Calculus"],
+  [/\binformation technology\b/gi, "IT"],
+  [/\bcomputer science\b/gi, "CS"],
+  [/\blanguage\b/gi, ""],
+  [/^introduction\b/i, "Intro"],
+];
 
 function abbreviateSubject(subject) {
   if (!subject) return "";
-  const text = String(subject).trim();
+  let text = String(subject).trim();
 
-  if (text.length <= 18 || /[\u0600-\u06FF]/.test(text)) {
+  if (/[\u0600-\u06FF]/.test(text)) {
     return text;
   }
 
-  const stopWords = new Set([
-    "to",
-    "of",
-    "in",
-    "and",
-    "the",
-    "for",
-    "with",
-    "on",
-    "a",
-    "an",
-    "&",
-    "-",
-  ]);
+  for (const [pattern, replacement] of PHRASE_RULES) {
+    text = text.replace(pattern, replacement);
+  }
 
-  const words = text.split(/\s+/);
-  let acronym = "";
-  let suffix = "";
-
-  words.forEach((word, index) => {
-    if (stopWords.has(word.toLowerCase())) return;
-
-    if (index === words.length - 1 && /^(i|ii|iii|iv|v|vi|\d+)$/i.test(word)) {
-      suffix = ` ${word.toUpperCase()}`;
-      return;
-    }
-
-    acronym += word[0].toUpperCase();
-  });
-
-  return acronym ? `${acronym}${suffix}` : text;
+  return text.replace(/\s+/g, " ").trim();
 }
 
 export default function MaterialCard({ file }) {
@@ -158,56 +149,56 @@ export default function MaterialCard({ file }) {
           </div>
 
           <div className="flex min-w-0 flex-col items-end gap-1 text-[11px] font-medium leading-4 text-muted-foreground">
-            <div
-              className="flex max-w-full items-center gap-1.5 whitespace-nowrap"
-              dir="ltr"
-            >
-              <span className="shrink-0">{format.label}</span>
-              {file.sizeMB && (
-                <>
-                  <span className="shrink-0">•</span>
-                  <span className="shrink-0">{file.sizeMB} MB</span>
-                </>
-              )}
-              {pageCount > 0 && (
-                <>
-                  <span className="shrink-0">•</span>
-                  <span className="shrink-0">{pageCount}p</span>
-                </>
-              )}
-            </div>
-
-            {(displaySubject || file.instructor) && (
+            {(displaySubject || file.sizeMB || pageCount > 0) && (
               <div className="flex max-w-full items-center gap-1.5 whitespace-nowrap">
                 {displaySubject && (
                   <span
                     dir="auto"
-                    className={`truncate ${file.instructor ? "max-w-[50%]" : ""}`}
+                    className="truncate"
                     title={file.subject}
                   >
                     {displaySubject}
                   </span>
                 )}
-                {displaySubject && file.instructor && (
+                {/* {displaySubject && file.sizeMB && (
                   <span className="shrink-0">•</span>
                 )}
-                {file.instructor && (
-                  <span className="truncate">{file.instructor}</span>
+                {file.sizeMB && (
+                  <span dir="ltr" className="shrink-0">
+                    {file.sizeMB} MB
+                  </span>
+                )} */}
+                {pageCount > 0 && (
+                  <>
+                    {(displaySubject || file.sizeMB) && (
+                      <span className="shrink-0">•</span>
+                    )}
+                    <span dir="ltr" className="shrink-0">
+                      {pageCount}p
+                    </span>
+                  </>
                 )}
+              </div>
+            )}
+
+            {file.instructor && (
+              <div className="max-w-full truncate">
+                {file.instructor}
               </div>
             )}
           </div>
         </div>
 
         <h2
-          className="mt-4 line-clamp-2 min-h-10 text-sm font-bold leading-relaxed text-foreground group-hover:text-primary transition-colors"
+          dir="ltr"
+          className="mt-4 text-sm font-bold leading-relaxed text-foreground group-hover:text-primary transition-colors line-clamp-2"
           title={file.title}
         >
           {displayTitle}
         </h2>
       </div>
 
-      <div className="relative z-10">
+      <div className="relative z-10 mt-4">
         <Button
           render={
             <a href={downloadUrl} target="_blank" rel="noopener noreferrer" />
