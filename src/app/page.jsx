@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Header from "@/components/Header";
 import PreferencesModal from "@/components/PreferencesModal";
-import heroImage from "../../public/image.png";
+import heroImage from "../../public/hero.png";
 
 export default function Home() {
   return (
