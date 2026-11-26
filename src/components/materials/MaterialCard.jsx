@@ -90,10 +90,53 @@ function cleanFileTitle(title) {
   return String(title).replace(/\.(pdf|docx?|pptx?|xlsx?|png|jpe?g)$/i, "");
 }
 
+function abbreviateSubject(subject) {
+  if (!subject) return "";
+  const text = String(subject).trim();
+
+  if (text.length <= 18 || /[\u0600-\u06FF]/.test(text)) {
+    return text;
+  }
+
+  const stopWords = new Set([
+    "to",
+    "of",
+    "in",
+    "and",
+    "the",
+    "for",
+    "with",
+    "on",
+    "a",
+    "an",
+    "&",
+    "-",
+  ]);
+
+  const words = text.split(/\s+/);
+  let acronym = "";
+  let suffix = "";
+
+  words.forEach((word, index) => {
+    if (stopWords.has(word.toLowerCase())) return;
+
+    if (index === words.length - 1 && /^(i|ii|iii|iv|v|vi|\d+)$/i.test(word)) {
+      suffix = ` ${word.toUpperCase()}`;
+      return;
+    }
+
+    acronym += word[0].toUpperCase();
+  });
+
+  return acronym ? `${acronym}${suffix}` : text;
+}
+
 export default function MaterialCard({ file }) {
   const format = getFileFormatMeta(file.mimeType);
   const IconComponent = format.icon;
   const displayTitle = cleanFileTitle(file.title);
+  const displaySubject = abbreviateSubject(file.subject);
+  const pageCount = Number(file.pages ?? file.pageCount);
   const { viewUrl, downloadUrl } = getDriveUrls(file.driveId, file.mimeType);
 
   return (
@@ -114,56 +157,60 @@ export default function MaterialCard({ file }) {
             <IconComponent className="size-5" />
           </div>
 
-          <div
-            className="flex flex-wrap items-center gap-1.5 text-[11px] font-medium text-muted-foreground"
-            dir="ltr"
-          >
-            <span>{format.label}</span>
-            {file.sizeMB && (
-              <>
-                <span>•</span>
-                <span>{file.sizeMB} MB</span>
-              </>
+          <div className="flex min-w-0 flex-col items-end gap-1 text-[11px] font-medium leading-4 text-muted-foreground">
+            <div
+              className="flex max-w-full items-center gap-1.5 whitespace-nowrap"
+              dir="ltr"
+            >
+              <span className="shrink-0">{format.label}</span>
+              {file.sizeMB && (
+                <>
+                  <span className="shrink-0">•</span>
+                  <span className="shrink-0">{file.sizeMB} MB</span>
+                </>
+              )}
+              {pageCount > 0 && (
+                <>
+                  <span className="shrink-0">•</span>
+                  <span className="shrink-0">{pageCount}p</span>
+                </>
+              )}
+            </div>
+
+            {(displaySubject || file.instructor) && (
+              <div className="flex max-w-full items-center gap-1.5 whitespace-nowrap">
+                {displaySubject && (
+                  <span
+                    dir="auto"
+                    className={`truncate ${file.instructor ? "max-w-[50%]" : ""}`}
+                    title={file.subject}
+                  >
+                    {displaySubject}
+                  </span>
+                )}
+                {displaySubject && file.instructor && (
+                  <span className="shrink-0">•</span>
+                )}
+                {file.instructor && (
+                  <span className="truncate">{file.instructor}</span>
+                )}
+              </div>
             )}
           </div>
         </div>
 
-        <div className="mt-4">
-          <span className="text-xs font-semibold text-primary">
-            {file.subject}
-          </span>
-
-          <h2
-            className="mt-1 line-clamp-2 min-h-10 text-sm font-bold leading-relaxed text-foreground group-hover:text-primary transition-colors"
-            title={file.title}
-          >
-            {displayTitle}
-          </h2>
-        </div>
-
-        <div className="flex items-center gap-1 text-xs text-muted-foreground min-w-0">
-          <span className="truncate">{file.instructor}</span>
-          <span className="text-border shrink-0">•</span>
-          <span className="shrink-0">
-            <span className="sm:hidden">م</span>
-            <span className="hidden sm:inline">مستوى</span> {file.level}
-          </span>
-          <span className="text-border shrink-0">•</span>
-          <span className="shrink-0">
-            <span className="sm:hidden">ت</span>
-            <span className="hidden sm:inline">ترم</span> {file.semester}
-          </span>
-        </div>
+        <h2
+          className="mt-4 line-clamp-2 min-h-10 text-sm font-bold leading-relaxed text-foreground group-hover:text-primary transition-colors"
+          title={file.title}
+        >
+          {displayTitle}
+        </h2>
       </div>
 
-      <div className="relative z-10 pt-4">
+      <div className="relative z-10">
         <Button
           render={
-            <a
-              href={downloadUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            />
+            <a href={downloadUrl} target="_blank" rel="noopener noreferrer" />
           }
           variant="default"
           size="sm"

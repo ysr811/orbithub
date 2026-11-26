@@ -83,11 +83,11 @@ export default function Header() {
     <header
       dir="rtl"
       className={cn(
-        "sticky top-0 z-50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 transition-all duration-300 ease-in-out",
+        "sticky top-0 z-50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 transition-all duration-300 ease-in-out bg-background",
         isVisible ? "translate-y-0" : "-translate-y-full",
         isScrolled
-          ? "bg-background border-b border-border/50 shadow-2xs"
-          : "bg-transparent border-b border-transparent shadow-none"
+          ? "border-b border-border/50 shadow-2xs"
+          : "border-b border-transparent shadow-none"
       )}
     >
       <div className="relative h-16 sm:h-20 flex items-center justify-between gap-4">
