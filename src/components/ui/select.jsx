@@ -4,6 +4,7 @@ import * as React from "react";
 import { cva } from "class-variance-authority";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
 
 const selectVariants = cva(
   [
@@ -118,4 +119,58 @@ function SelectField({
   );
 }
 
-export { Select, SelectField, selectVariants };
+/**
+ * Icon-triggered native Select control styled with Button variants.
+ * Useful for compact mobile menus, action pickers, or icon-only dropdowns.
+ */
+function IconSelect({
+  icon,
+  options = [],
+  value,
+  onValueChange,
+  onChange,
+  placeholder,
+  variant = "outline",
+  size = "icon",
+  className,
+  disabled = false,
+  ...props
+}) {
+  return (
+    <div className={cn("relative inline-flex shrink-0", className)}>
+      <select
+        value={value}
+        disabled={disabled}
+        onChange={(e) => {
+          onChange?.(e);
+          onValueChange?.(e.target.value);
+        }}
+        className="peer absolute inset-0 z-10 h-full w-full cursor-pointer appearance-none text-base opacity-0 disabled:cursor-not-allowed"
+        {...props}
+      >
+        {placeholder && (
+          <option value="" disabled hidden>
+            {placeholder}
+          </option>
+        )}
+        {options.map((opt) => (
+          <option key={opt.value} value={opt.value} disabled={opt.disabled}>
+            {opt.label}
+          </option>
+        ))}
+      </select>
+
+      <div
+        className={cn(
+          buttonVariants({ variant, size }),
+          "pointer-events-none peer-hover:bg-muted peer-active:scale-[0.98] peer-focus-visible:border-ring peer-focus-visible:ring-3 peer-focus-visible:ring-ring/50 peer-disabled:opacity-50"
+        )}
+        aria-hidden="true"
+      >
+        {icon}
+      </div>
+    </div>
+  );
+}
+
+export { Select, SelectField, IconSelect, selectVariants };

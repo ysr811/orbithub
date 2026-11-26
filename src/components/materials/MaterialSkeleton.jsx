@@ -1,7 +1,7 @@
 function SkeletonCard() {
   return (
     <div
-      className="h-44 sm:h-48 rounded-xl bg-muted/50 skeleton-shimmer"
+      className="h-40 rounded-3xl bg-muted/50 skeleton-shimmer"
       aria-hidden="true"
     />
   );
@@ -21,10 +21,10 @@ export default function MaterialSkeleton({
 
       {showHeaderSkeleton && (
         <div
-          className="flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+          className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mt-4"
           aria-hidden="true"
         >
-          <div className="h-11 w-full sm:max-w-md md:max-w-lg rounded-xl bg-muted skeleton-shimmer" />
+          <div className="h-11 w-full sm:max-w-md md:max-w-lg rounded-3xl bg-muted skeleton-shimmer" />
         </div>
       )}
 

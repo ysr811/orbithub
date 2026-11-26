@@ -33,9 +33,9 @@ export default function MaterialFilterBar({
 
         <Button
           type="button"
-          variant="outline"
+          variant="ghost"
           onClick={onOpenDrawer}
-          className="h-11 md:h-11 px-3.5 sm:px-4 gap-2 font-semibold rounded-xl border-border bg-card hover:bg-muted text-foreground shrink-0"
+          className="h-11 md:h-11 px-3.5 sm:px-4 gap-2 shrink-0"
           aria-label="فتح خيارات التصفية"
         >
           <Funnel className="size-4 text-primary" />

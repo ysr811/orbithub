@@ -11,6 +11,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
+  abbreviateSubject,
   getMajorLabel,
   getShortLevelLabel,
   getShortSemesterLabel,
@@ -60,7 +61,8 @@ export default function MaterialActiveChips({
       id: "subject",
       key: "subject",
       icon: BookText,
-      label: `المادة: ${filters.subject}`,
+      label: abbreviateSubject(filters.subject),
+      title: filters.subject,
       ariaLabel: `إزالة فلتر المادة ${filters.subject}`,
     });
   }
@@ -100,11 +102,13 @@ export default function MaterialActiveChips({
         return (
           <Badge
             key={chip.id}
-            variant="outline"
-            className="h-auto px-3 py-2 gap-1.5 text-xs font-medium border-border bg-card text-foreground shadow-2xs overflow-visible"
+            variant="secondary"
+            size="lg"
           >
             <Icon className="size-3 text-primary shrink-0" />
-            <span className="max-w-45 sm:max-w-xs truncate">{chip.label}</span>
+            <span className="max-w-45 sm:max-w-xs truncate" title={chip.title}>
+              {chip.label}
+            </span>
             <Button
               type="button"
               variant="ghost"

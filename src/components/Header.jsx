@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { IconSelect } from "@/components/ui/select";
 import { Menu, SlidersHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 import PreferencesModal from "@/components/PreferencesModal";
@@ -133,12 +134,11 @@ export default function Header() {
         <div className="flex items-center gap-3 md:gap-2">
           <Button
             type="button"
-            variant="outline"
+            variant="ghost"
             size="icon"
             onClick={() => setIsPreferencesOpen(true)}
             title="تحديد أو تغيير مستواك الدراسي"
             aria-label="تحديد أو تغيير مستواك الدراسي"
-            className="rounded-2xl md:rounded-xl border-border/80 text-foreground/90 hover:text-foreground bg-white hover:bg-muted shadow-xs active:scale-95"
           >
             <SlidersHorizontal strokeWidth={2} />
           </Button>
@@ -148,35 +148,23 @@ export default function Header() {
           </Button>
 
           {/* Mobile Native OS Navigation (Leverages OS-native Picker / Action Sheet) */}
-          <div className="relative md:hidden size-12 sm:size-11">
-            <select
-              aria-label="قائمة التنقل السريع"
-              value={activeHref}
-              onChange={(e) => {
-                const targetPath = e.target.value;
-                if (targetPath && targetPath !== pathname) {
-                  router.push(targetPath);
-                }
-              }}
-              className="peer absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none z-10 text-base"
-            >
-              <option value="" disabled hidden>
-                الانتقال إلى...
-              </option>
-              {navLinks.map((link) => (
-                <option key={link.href} value={link.href}>
-                  {link.name}
-                </option>
-              ))}
-            </select>
-
-            <div
-              className="size-12 sm:size-11 rounded-2xl sm:rounded-xl border border-border/80 text-foreground/90 bg-white hover:bg-muted shadow-xs flex items-center justify-center transition-all pointer-events-none peer-focus-visible:ring-3 peer-focus-visible:ring-ring/50 peer-focus-visible:border-ring"
-              aria-hidden="true"
-            >
-              <Menu className="size-6.5 sm:size-6" strokeWidth={2.2} />
-            </div>
-          </div>
+          <IconSelect
+          variant=""
+            className="md:hidden"
+            aria-label="قائمة التنقل السريع"
+            value={activeHref}
+            placeholder="الانتقال إلى..."
+            options={navLinks.map((link) => ({
+              value: link.href,
+              label: link.name,
+            }))}
+            onValueChange={(targetPath) => {
+              if (targetPath && targetPath !== pathname) {
+                router.push(targetPath);
+              }
+            }}
+            icon={<Menu strokeWidth={2} />}
+          />
         </div>
       </div>
 

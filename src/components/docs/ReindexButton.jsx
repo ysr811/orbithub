@@ -97,7 +97,7 @@ export default function ReindexButton() {
               ? CheckCircle2
               : RefreshCw
           }
-          className={`h-auto md:h-auto px-5 py-2.5 rounded-lg font-bold text-xs sm:text-sm shadow-xs ${
+          className={`h-auto md:h-auto px-5 py-2.5 font-bold text-xs sm:text-sm ${
             status === "success"
               ? "bg-emerald-600 text-white hover:bg-emerald-600 disabled:opacity-100"
               : status === "error"
