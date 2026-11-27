@@ -81,7 +81,14 @@ export default function Header() {
     "";
 
   return (
-    <header
+    <>
+      <div
+        dir="rtl"
+        className="-mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-2 bg-primary text-primary-foreground text-center text-xs sm:text-sm font-medium font-cairo"
+      >
+        المنصة قيد التطوير ولم تُطلق رسمياً بعد.
+      </div>
+      <header
       dir="rtl"
       className={cn(
         "sticky top-0 z-50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 transition-all duration-300 ease-in-out bg-background",
@@ -174,6 +181,7 @@ export default function Header() {
         onOpenChange={setIsPreferencesOpen}
         initialStep={2}
       />
-    </header>
+      </header>
+    </>
   );
 }
