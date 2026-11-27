@@ -63,7 +63,7 @@ function DialogContent({
                 variant="ghost"
                 size="icon-sm"
                 aria-label="إغلاق النافذة"
-                className="absolute top-4 end-4 z-20 border-none bg-white/90 text-muted-foreground hover:bg-muted hover:text-foreground"
+                className="absolute top-4 inset-e-4 z-20 border-none bg-white/30 hover:bg-muted text-foreground"
               />
             }
           >

@@ -69,7 +69,7 @@ function PreferencesModalBody({ initialStep, onClose, onDismiss }) {
         <DialogHeader>
           <DialogTitle>أهلاً بك في Orbit Hub</DialogTitle>
           <DialogDescription>
-            جمعنا لك كل ما تحتاجه لمسيرتك الدراسية في كلية الحاسبات وتقنية المعلومات — من مقررات وملازم صُممت لتنير طريقك وتختصر جهدك. كل خطوة تخطوها هنا تقربك خطوة نحو طموحك في عالم التقنية والبرمجة. ابدأ رحلتك بثقة وشغف، فالتميز حليفك!
+            بوابة طلاب كلية الحاسبات وتقنية المعلومات للوصول السريع إلى المقررات والملازم الدراسية.
           </DialogDescription>
         </DialogHeader>
 
@@ -99,7 +99,7 @@ function PreferencesModalBody({ initialStep, onClose, onDismiss }) {
         <DialogHeader>
           <DialogTitle>حدد تخصصك ومستواك</DialogTitle>
           <DialogDescription>
-            اختر تخصصك الأكاديمي ومستواك الدراسي والترم لتخصيص المنصة وتجهيز مقرراتك تلقائياً.
+            اختر تخصصك ومستواك والترم لتجهيز مقرراتك تلقائياً.
           </DialogDescription>
         </DialogHeader>
 
@@ -177,7 +177,7 @@ function PreferencesModalBody({ initialStep, onClose, onDismiss }) {
       <DialogHeader>
         <DialogTitle>نتمنى لك التوفيق والنجاح</DialogTitle>
         <DialogDescription>
-          تم ضبط المنصة وفق تخصصك ومستواك الدراسي، ونتمنى لك مسيرة أكاديمية حافلة بالتميز والتفوق.
+          تم حفظ تفضيلاتك وتجهيز المنصة لمقرراتك الدراسية.
         </DialogDescription>
       </DialogHeader>
 
