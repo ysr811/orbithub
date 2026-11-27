@@ -95,8 +95,19 @@ export default function MaterialActiveChips({
     <div
       role="region"
       aria-label="الفلاتر المطبقة حالياً"
-      className="flex flex-wrap items-center gap-2 pt-0.5 font-cairo"
+      className="flex items-center gap-2 pt-0.5 font-cairo overflow-x-auto scrollbar-none [&::-webkit-scrollbar]:hidden"
     >
+      <Button
+        type="button"
+        variant="ghost"
+        size="xs"
+        onClick={onResetAll}
+        className="text-xs text-destructive hover:text-destructive hover:bg-destructive/10 font-bold gap-1 h-7 md:h-7 px-2.5 rounded-full"
+      >
+        <RotateCcw className="size-3" />
+        مسح الكل
+      </Button>
+
       {chips.map((chip) => {
         const Icon = chip.icon;
         return (
@@ -104,6 +115,7 @@ export default function MaterialActiveChips({
             key={chip.id}
             variant="secondary"
             size="lg"
+            className="shrink-0"
           >
             <Icon className="size-3 text-primary shrink-0" />
             <span className="max-w-45 sm:max-w-xs truncate" title={chip.title}>
@@ -122,17 +134,6 @@ export default function MaterialActiveChips({
           </Badge>
         );
       })}
-
-      <Button
-        type="button"
-        variant="ghost"
-        size="xs"
-        onClick={onResetAll}
-        className="text-xs text-destructive hover:text-destructive hover:bg-destructive/10 font-bold gap-1 h-7 md:h-7 px-2.5 rounded-full"
-      >
-        <RotateCcw className="size-3" />
-        مسح الكل
-      </Button>
     </div>
   );
 }

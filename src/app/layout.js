@@ -17,7 +17,7 @@ const museoModerno = MuseoModerno({
 
 const siteTitle = "OrbitHub | كلية الحاسبات وتقنية المعلومات";
 const siteDescription =
-  "بوابة طلاب كلية الحاسبات وتقنية المعلومات — المقررات والملازم الدراسية في مكان واحد.";
+  "بوابة طلاب كلية الحاسبات وتقنية المعلومات - المقررات والملازم الدراسية في مكان واحد.";
 
 export const metadata = {
   metadataBase: new URL("https://orbithub11.vercel.app"),

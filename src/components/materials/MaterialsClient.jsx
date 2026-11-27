@@ -50,7 +50,7 @@ export default function MaterialsClient({ summaries = [] }) {
           isSearching={isSearching}
         />
 
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium shrink-0 pt-0.5 sm:pt-0">
+        <div className="lg:flex items-center gap-1.5 text-xs text-muted-foreground font-medium shrink-0 pt-0.5 sm:pt-0 hidden">
           <FileStack className="size-3.5 text-primary" />
           <span>
             {hasActiveFilters ? (
