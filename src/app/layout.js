@@ -15,9 +15,9 @@ const museoModerno = MuseoModerno({
   display: "swap",
 });
 
-const siteTitle = "OrbitHub | البوابة الأكاديمية لكلية الحاسبات وتقنية المعلومات";
+const siteTitle = "OrbitHub | كلية الحاسبات وتقنية المعلومات";
 const siteDescription =
-  "البوابة الأكاديمية الموحدة لطلاب كلية الحاسبات وتقنية المعلومات بجامعة حضرموت — المقررات والملازم الدراسية في مكان واحد منظم.";
+  "بوابة طلاب كلية الحاسبات وتقنية المعلومات — المقررات والملازم الدراسية في مكان واحد.";
 
 export const metadata = {
   metadataBase: new URL("https://orbithub11.vercel.app"),
