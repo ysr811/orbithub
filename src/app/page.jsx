@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Header from "@/components/Header";
 import PreferencesModal from "@/components/PreferencesModal";
-import heroImage from "../../public/hero.png";
 
 export default function Home() {
   return (
@@ -9,7 +8,8 @@ export default function Home() {
       <Header />
       <main>
         <h1 className="sr-only">
-          Orbit Hub - البوابة الأكاديمية لطلاب كلية الحاسبات وتقنية المعلومات بجامعة حضرموت
+          Orbit Hub - البوابة الأكاديمية لطلاب كلية الحاسبات وتقنية المعلومات
+          بجامعة حضرموت
         </h1>
         <section
           dir="rtl"
@@ -31,12 +31,16 @@ export default function Home() {
               loading="eager"
               className="w-full h-auto object-contain select-none"
             />
-            <Image
-              src={heroImage}
-              alt="Orbit Hub Preview"
-              preload
-              className="w-full h-auto object-contain rounded-sm lg:rounded-lg"
-            />
+            <div className="bg-black w-full rounded-sm lg:rounded-lg overflow-hidden">
+              <Image
+                src="/hero.png"
+                alt="Orbit Hub Preview"
+                width={1418}
+                height={1280}
+                preload
+                className="w-full max-w-6xl h-auto object-contain m-auto"
+              />
+            </div>
           </div>
         </section>
       </main>
