@@ -29,9 +29,11 @@ export default function DecsOverviewPage() {
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
               />
             </div>
-            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed line-clamp-2 p-5 sm:p-6 ">
-              {doc.description}
-            </p>
+            <div className="p-5 sm:p-6 overflow-hidden">
+              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed line-clamp-2">
+                {doc.description}
+              </p>
+            </div>
           </Link>
         ))}
       </div>

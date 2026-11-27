@@ -64,7 +64,7 @@ function PreferencesModalBody({ initialStep, onClose, onDismiss }) {
   if (step === 1) {
     return (
       <div className="flex flex-col">
-        <div className="relative w-full aspect-[900/353] bg-muted rounded-t-3xl overflow-hidden border-b border-border/50">
+        <div className="relative w-full aspect-900/353 bg-muted rounded-t-3xl overflow-hidden border-b border-border/50">
           <Image
             src="/onboarding.png"
             alt="أهلاً بك في Orbit Hub"
