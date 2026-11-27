@@ -15,10 +15,35 @@ const museoModerno = MuseoModerno({
   display: "swap",
 });
 
+const siteTitle = "OrbitHub | البوابة الأكاديمية لكلية الحاسبات وتقنية المعلومات";
+const siteDescription =
+  "البوابة الأكاديمية الموحدة لطلاب كلية الحاسبات وتقنية المعلومات بجامعة حضرموت — المقررات والملازم الدراسية في مكان واحد منظم.";
+
 export const metadata = {
-  title: "OrbitHub | البوابة الأكاديمية لكلية الحاسبات وتقنية المعلومات",
-  description:
-    "البوابة الأكاديمية الموحدة لطلاب كلية الحاسبات وتقنية المعلومات بجامعة حضرموت — المقررات والملازم الدراسية في مكان واحد منظم.",
+  metadataBase: new URL("https://orbithub11.vercel.app"),
+  title: siteTitle,
+  description: siteDescription,
+  openGraph: {
+    title: siteTitle,
+    description: siteDescription,
+    url: "https://orbithub11.vercel.app",
+    siteName: "OrbitHub",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "OrbitHub Banner",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteTitle,
+    description: siteDescription,
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({ children }) {
