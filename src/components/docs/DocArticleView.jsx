@@ -1,19 +1,20 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import MarkdownViewer from "@/components/docs/MarkdownViewer";
-import ArticleBanner from "@/components/docs/ArticleBanner";
 
-export default function DocArticleView({ doc, content }) {
+export default function DocArticleView({ doc, content, prevDoc, nextDoc }) {
   return (
     <div className="w-full max-w-4xl mx-auto flex flex-col gap-6 font-cairo">
       <div className="flex items-center justify-between gap-2 pb-3">
-        <Link
-          href="/decs"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground hover:text-primary transition-colors cursor-pointer"
+        <Button
+          variant="ghost"
+          size="sm"
+          icon={<ArrowRight />}
+          render={<Link href="/decs" />}
         >
-          <ArrowRight className="size-4" />
-          <span>العودة للمقالات والأدلة</span>
-        </Link>
+          العودة للمقالات والأدلة
+        </Button>
 
         {doc.lastUpdated && (
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
@@ -22,9 +23,36 @@ export default function DocArticleView({ doc, content }) {
         )}
       </div>
 
-      <ArticleBanner slug={doc.slug} alt={doc.description} />
-
       <MarkdownViewer content={content} />
+
+      {(prevDoc || nextDoc) && (
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3 pt-6 mt-2 border-t border-border/60">
+          {prevDoc ? (
+            <Button
+              className="w-full h-auto py-4 px-4 sm:py-12 sm:px-12 "
+              variant="outline"
+              icon={<ArrowRight className="shrink-0" />}
+              render={<Link href={`/decs/${prevDoc.slug}`} />}
+            >
+              <span className="truncate">{prevDoc.title}</span>
+            </Button>
+          ) : (
+            <div className="hidden sm:block" />
+          )}
+
+          {nextDoc && (
+            <Button
+              className="w-full h-auto py-4 px-4 sm:py-12 sm:px-12"
+              variant="outline"
+              icon={<ArrowLeft className="shrink-0" />}
+              iconPosition="end"
+              render={<Link href={`/decs/${nextDoc.slug}`} />}
+            >
+              <span className="truncate">{nextDoc.title}</span>
+            </Button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

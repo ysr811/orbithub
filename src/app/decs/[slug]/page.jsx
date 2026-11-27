@@ -1,7 +1,8 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
-import { docsList, getDocBySlug, getDocContent } from "@/data/docs";
+import { docsList, getDocBySlug, getDocContent, getAdjacentDocs } from "@/data/docs";
 import DocArticleView from "@/components/docs/DocArticleView";
+import DocArticleSkeleton from "@/components/docs/DocArticleSkeleton";
 
 export function generateStaticParams() {
   return docsList.map((doc) => ({ slug: doc.slug }));
@@ -26,18 +27,21 @@ async function DocContent({ params }) {
   const content = getDocContent(doc.fileName);
   if (!content) notFound();
 
-  return <DocArticleView doc={doc} content={content} />;
+  const { prevDoc, nextDoc } = getAdjacentDocs(slug);
+
+  return (
+    <DocArticleView
+      doc={doc}
+      content={content}
+      prevDoc={prevDoc}
+      nextDoc={nextDoc}
+    />
+  );
 }
 
 export default function DocArticlePage({ params }) {
   return (
-    <Suspense
-      fallback={
-        <div className="w-full max-w-4xl mx-auto py-12 text-center text-sm text-muted-foreground font-cairo">
-          جاري تحميل المقال...
-        </div>
-      }
-    >
+    <Suspense fallback={<DocArticleSkeleton />}>
       <DocContent params={params} />
     </Suspense>
   );

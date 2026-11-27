@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { docsList } from "@/data/docs";
-import { ArrowLeft, Calendar } from "lucide-react";
 
 export const metadata = {
   title: "المقالات والأدلة | OrbitHub",
@@ -19,9 +18,9 @@ export default function DecsOverviewPage() {
           <Link
             key={doc.slug}
             href={`/decs/${doc.slug}`}
-            className="group relative flex flex-col justify-between rounded-2xl border border-border/80 bg-card overflow-hidden shadow-2xs hover:border-primary/50 hover:shadow-xs transition-all duration-200"
+            className="group relative flex flex-col justify-between rounded-2xl border border-transparent hover:border-border/80 bg-card overflow-hidden transition-all"
           >
-            <div className="relative w-full aspect-[16/9] bg-muted overflow-hidden">
+            <div className="relative w-full aspect-video bg-muted overflow-hidden">
               <Image
                 src={`/decs/${doc.slug}.png`}
                 alt={doc.description || doc.title}
@@ -30,28 +29,9 @@ export default function DecsOverviewPage() {
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
               />
             </div>
-
-            <div className="flex flex-col justify-between flex-1 p-5 sm:p-6 gap-4">
-              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed line-clamp-3">
-                {doc.description}
-              </p>
-
-              <div className="flex items-center justify-between pt-4 border-t border-border/60 text-xs">
-                {doc.lastUpdated ? (
-                  <div className="flex items-center gap-1.5 text-muted-foreground">
-                    <Calendar className="size-3.5" />
-                    <span>آخر تحديث: {doc.lastUpdated}</span>
-                  </div>
-                ) : (
-                  <div />
-                )}
-
-                <span className="inline-flex items-center gap-1 font-bold text-primary group-hover:-translate-x-1 transition-transform">
-                  <span>قراءة المقال</span>
-                  <ArrowLeft className="size-3.5" />
-                </span>
-              </div>
-            </div>
+            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed line-clamp-2 p-5 sm:p-6 ">
+              {doc.description}
+            </p>
           </Link>
         ))}
       </div>

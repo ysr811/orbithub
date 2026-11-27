@@ -14,7 +14,7 @@ const navLinks = [
   { name: "الرئيسية", href: "/" },
   { name: "الملازم", href: "/materials" },
   { name: "المقالات", href: "/decs" },
-  { name: "الهوية", href: "/brand" },
+  { name: "من نحن", href: "/decs/about-us" },
 ];
 
 export default function Header() {
@@ -74,11 +74,11 @@ export default function Header() {
     isPreferencesOpen || (isCurrentPath ? scrollState.visible : true);
 
   const activeHref =
+    navLinks.find((link) => pathname === link.href)?.href ??
     navLinks.find(
-      (link) =>
-        pathname === link.href ||
-        (link.href !== "/" && pathname?.startsWith(link.href))
-    )?.href ?? "";
+      (link) => link.href !== "/" && pathname?.startsWith(link.href)
+    )?.href ??
+    "";
 
   return (
     <header
