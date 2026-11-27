@@ -48,13 +48,11 @@ export default function MaterialFilterDrawer({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[calc(100%-3rem)] sm:w-full sm:max-w-xl md:max-w-2xl p-6 sm:p-8 md:p-9 bg-white border-none shadow-none rounded-3xl font-cairo flex flex-col gap-5 sm:gap-6">
-        <DialogHeader className="gap-2 text-right">
+      <DialogContent>
+        <DialogHeader>
           <div className="flex items-center gap-2.5">
             <FunnelPlus className="size-4 text-primary" />
-            <DialogTitle className="text-xl sm:text-2xl font-bold tracking-tight text-foreground leading-snug">
-              فلتر الملازم
-            </DialogTitle>
+            <DialogTitle>فلتر الملازم</DialogTitle>
           </div>
         </DialogHeader>
 
@@ -130,13 +128,12 @@ export default function MaterialFilterDrawer({
           )}
         </div>
 
-        <DialogFooter className="flex-row items-center justify-between sm:justify-between pt-5">
+        <DialogFooter>
           <Button
             type="button"
             variant="default"
             onClick={() => onOpenChange(false)}
             size="sm"
-            className="h-9 px-6 font-bold text-xs sm:text-sm"
           >
             تطبيق
           </Button>
@@ -147,7 +144,6 @@ export default function MaterialFilterDrawer({
               variant="ghost"
               onClick={resetAll}
               size="sm"
-              className="h-9 px-3 gap-1.5 text-xs text-destructive hover:bg-destructive/10"
             >
               <RotateCcw className="size-3.5" />
               مسح الفلاتر

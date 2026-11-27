@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
-import Image from "next/image";
 import {
   Dialog,
   DialogContent,
@@ -9,6 +8,7 @@ import {
   DialogFooter,
   DialogTitle,
   DialogDescription,
+  DialogImage,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { SelectField } from "@/components/ui/select";
@@ -63,61 +63,42 @@ function PreferencesModalBody({ initialStep, onClose, onDismiss }) {
 
   if (step === 1) {
     return (
-      <div className="flex flex-col">
-        <div className="relative w-full aspect-900/353 bg-muted rounded-t-3xl overflow-hidden border-b border-border/50">
-          <Image
-            src="/onboarding.png"
-            alt="أهلاً بك في Orbit Hub"
-            fill
-            loading="eager"
-            sizes="(max-width: 768px) 100vw, 672px"
-            className="object-cover"
-          />
-        </div>
+      <>
+        <DialogImage src="/onboarding.png" alt="أهلاً بك في Orbit Hub" />
 
-        <div className="flex flex-col p-6 sm:p-8 md:p-9 gap-5 sm:gap-6">
-          <DialogHeader className="gap-2 text-right">
-            <DialogTitle className="text-xl sm:text-2xl font-bold tracking-tight text-foreground leading-snug">
-              أهلاً بك في Orbit Hub
-            </DialogTitle>
-            <DialogDescription className="text-sm sm:text-base text-muted-foreground leading-relaxed pt-1">
-              جمعنا لك كل ما تحتاجه لمسيرتك الدراسية في كلية الحاسبات وتقنية المعلومات — من مقررات وملازم صُممت لتنير طريقك وتختصر جهدك. كل خطوة تخطوها هنا تقربك خطوة نحو طموحك في عالم التقنية والبرمجة. ابدأ رحلتك بثقة وشغف، فالتميز حليفك!
-            </DialogDescription>
-          </DialogHeader>
+        <DialogHeader>
+          <DialogTitle>أهلاً بك في Orbit Hub</DialogTitle>
+          <DialogDescription>
+            جمعنا لك كل ما تحتاجه لمسيرتك الدراسية في كلية الحاسبات وتقنية المعلومات — من مقررات وملازم صُممت لتنير طريقك وتختصر جهدك. كل خطوة تخطوها هنا تقربك خطوة نحو طموحك في عالم التقنية والبرمجة. ابدأ رحلتك بثقة وشغف، فالتميز حليفك!
+          </DialogDescription>
+        </DialogHeader>
 
-          <DialogFooter className="flex-row items-center justify-between sm:justify-between pt-5">
-            <Button
-              type="button"
-              onClick={() => setStep(2)}
-              size="sm"
-              className="h-9 px-6 font-bold text-xs sm:text-sm"
-            >
-              التالي
-            </Button>
+        <DialogFooter>
+          <Button
+            type="button"
+            onClick={() => setStep(2)}
+          >
+            التالي
+          </Button>
 
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={onDismiss}
-              className="h-9 px-3 text-xs text-muted-foreground hover:text-foreground"
-            >
-              تخطي
-            </Button>
-          </DialogFooter>
-        </div>
-      </div>
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={onDismiss}
+          >
+            تخطي
+          </Button>
+        </DialogFooter>
+      </>
     );
   }
 
   if (step === 2) {
     return (
-      <div className="flex flex-col p-6 sm:p-8 md:p-9 gap-5 sm:gap-6">
-        <DialogHeader className="gap-2 text-right">
-          <DialogTitle className="text-xl sm:text-2xl font-bold tracking-tight text-foreground leading-snug">
-            حدد تخصصك ومستواك
-          </DialogTitle>
-          <DialogDescription className="text-sm sm:text-base text-muted-foreground leading-relaxed pt-1">
+      <>
+        <DialogHeader>
+          <DialogTitle>حدد تخصصك ومستواك</DialogTitle>
+          <DialogDescription>
             اختر تخصصك الأكاديمي ومستواك الدراسي والترم لتخصيص المنصة وتجهيز مقرراتك تلقائياً.
           </DialogDescription>
         </DialogHeader>
@@ -148,15 +129,13 @@ function PreferencesModalBody({ initialStep, onClose, onDismiss }) {
           />
         </div>
 
-        <DialogFooter className="flex-row items-center justify-between sm:justify-between pt-5">
+        <DialogFooter>
           {initialStep === 1 ? (
             <>
               <Button
                 type="button"
                 onClick={() => isStep2Valid && setStep(3)}
                 disabled={!isStep2Valid}
-                size="sm"
-                className="h-9 px-6 font-bold text-xs sm:text-sm disabled:cursor-not-allowed"
               >
                 التالي
               </Button>
@@ -164,9 +143,7 @@ function PreferencesModalBody({ initialStep, onClose, onDismiss }) {
               <Button
                 type="button"
                 variant="ghost"
-                size="sm"
                 onClick={() => setStep(1)}
-                className="h-9 px-3 text-xs text-muted-foreground hover:text-foreground"
               >
                 السابق
               </Button>
@@ -177,8 +154,6 @@ function PreferencesModalBody({ initialStep, onClose, onDismiss }) {
                 type="button"
                 onClick={handleSave}
                 disabled={!isStep2Valid}
-                size="sm"
-                className="h-9 px-6 font-bold text-xs sm:text-sm disabled:cursor-not-allowed"
               >
                 تأكيد
               </Button>
@@ -186,36 +161,30 @@ function PreferencesModalBody({ initialStep, onClose, onDismiss }) {
               <Button
                 type="button"
                 variant="ghost"
-                size="sm"
                 onClick={onClose}
-                className="h-9 px-3 text-xs text-muted-foreground hover:text-foreground"
               >
                 إلغاء
               </Button>
             </>
           )}
         </DialogFooter>
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="flex flex-col p-6 sm:p-8 md:p-9 gap-5 sm:gap-6">
-      <DialogHeader className="gap-2 text-right">
-        <DialogTitle className="text-xl sm:text-2xl font-bold tracking-tight text-foreground leading-snug">
-          نتمنى لك التوفيق والنجاح
-        </DialogTitle>
-        <DialogDescription className="text-sm sm:text-base text-muted-foreground leading-relaxed pt-1">
+    <>
+      <DialogHeader>
+        <DialogTitle>نتمنى لك التوفيق والنجاح</DialogTitle>
+        <DialogDescription>
           تم ضبط المنصة وفق تخصصك ومستواك الدراسي، ونتمنى لك مسيرة أكاديمية حافلة بالتميز والتفوق.
         </DialogDescription>
       </DialogHeader>
 
-      <DialogFooter className="flex-row items-center justify-between sm:justify-between pt-5">
+      <DialogFooter>
         <Button
           type="button"
           onClick={handleSave}
-          size="sm"
-          className="h-9 px-6 font-bold text-xs sm:text-sm"
         >
           ابدأ التصفح
         </Button>
@@ -223,14 +192,12 @@ function PreferencesModalBody({ initialStep, onClose, onDismiss }) {
         <Button
           type="button"
           variant="ghost"
-          size="sm"
           onClick={() => setStep(2)}
-          className="h-9 px-3 text-xs text-muted-foreground hover:text-foreground"
         >
           السابق
         </Button>
       </DialogFooter>
-    </div>
+    </>
   );
 }
 
@@ -283,7 +250,7 @@ export default function PreferencesModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="w-[calc(100%-3rem)] sm:w-full sm:max-w-xl md:max-w-2xl p-0 bg-white border-none shadow-none rounded-3xl font-cairo">
+      <DialogContent>
         {isOpen && (
           <PreferencesModalBody
             initialStep={initialStep}

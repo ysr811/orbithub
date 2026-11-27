@@ -13,7 +13,7 @@ export default function DocArticleView({ doc, content, prevDoc, nextDoc }) {
           icon={<ArrowRight />}
           render={<Link href="/decs" />}
         >
-          العودة للمقالات والأدلة
+          العودة للمقالات
         </Button>
 
         {doc.lastUpdated && (
@@ -26,10 +26,10 @@ export default function DocArticleView({ doc, content, prevDoc, nextDoc }) {
       <MarkdownViewer content={content} />
 
       {(prevDoc || nextDoc) && (
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3 pt-6 mt-2 border-t border-border/60">
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3 pt-6 my-4 h-12 lg:h-32 ">
           {prevDoc ? (
             <Button
-              className="w-full h-auto py-4 px-4 sm:py-12 sm:px-12 "
+              className="w-full"
               variant="outline"
               icon={<ArrowRight className="shrink-0" />}
               render={<Link href={`/decs/${prevDoc.slug}`} />}
@@ -42,7 +42,7 @@ export default function DocArticleView({ doc, content, prevDoc, nextDoc }) {
 
           {nextDoc && (
             <Button
-              className="w-full h-auto py-4 px-4 sm:py-12 sm:px-12"
+              className="w-full"
               variant="outline"
               icon={<ArrowLeft className="shrink-0" />}
               iconPosition="end"

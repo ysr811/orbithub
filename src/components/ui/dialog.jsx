@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { XIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -47,7 +48,7 @@ function DialogContent({
       <DialogPrimitive.Popup
         data-slot="dialog-content"
         className={cn(
-          "fixed top-1/2 left-1/2 z-50 grid h-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] sm:w-full max-w-md -translate-x-1/2 -translate-y-1/2 gap-5 overflow-y-auto rounded-2xl bg-white p-6 sm:p-8 font-cairo text-foreground shadow-none border-none duration-150 outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+          "fixed top-1/2 left-1/2 z-50 flex flex-col h-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-3rem)] sm:w-full sm:max-w-xl md:max-w-2xl -translate-x-1/2 -translate-y-1/2 gap-5 sm:gap-6 overflow-y-auto rounded-3xl bg-white p-6 sm:p-8 md:p-9 font-cairo text-foreground shadow-none border-none duration-150 outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
           className
         )}
         {...props}
@@ -79,7 +80,7 @@ function DialogHeader({ className, ...props }) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn("flex flex-col gap-1.5 text-start font-cairo", className)}
+      className={cn("flex flex-col gap-2 text-right font-cairo", className)}
       {...props}
     />
   );
@@ -95,7 +96,7 @@ function DialogFooter({
     <div
       data-slot="dialog-footer"
       className={cn(
-        "flex flex-col-reverse gap-2 pt-4 border-t border-border/50 sm:flex-row sm:justify-start font-cairo",
+        "flex flex-row items-center justify-between gap-2 pt-5 border-t border-border/50 font-cairo",
         className
       )}
       {...props}
@@ -119,7 +120,7 @@ function DialogTitle({ className, ...props }) {
     <DialogPrimitive.Title
       data-slot="dialog-title"
       className={cn(
-        "font-cairo text-lg font-bold text-foreground leading-snug",
+        "font-cairo text-xl sm:text-2xl font-bold tracking-tight text-foreground leading-snug",
         className
       )}
       {...props}
@@ -132,11 +133,42 @@ function DialogDescription({ className, ...props }) {
     <DialogPrimitive.Description
       data-slot="dialog-description"
       className={cn(
-        "font-cairo text-xs sm:text-sm text-muted-foreground leading-relaxed",
+        "font-cairo text-sm sm:text-base text-muted-foreground leading-relaxed pt-1",
         className
       )}
       {...props}
     />
+  );
+}
+
+function DialogImage({
+  src,
+  alt = "",
+  className,
+  aspectClassName = "aspect-900/353",
+  sizes = "(max-width: 768px) 100vw, 672px",
+  loading = "eager",
+  ...props
+}) {
+  return (
+    <div
+      data-slot="dialog-image"
+      className={cn(
+        "relative shrink-0 -mx-6 -mt-6 sm:-mx-8 sm:-mt-8 md:-mx-9 md:-mt-9 bg-muted rounded-t-3xl overflow-hidden border-b border-border/50",
+        aspectClassName,
+        className
+      )}
+    >
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        loading={loading}
+        sizes={sizes}
+        className="object-cover"
+        {...props}
+      />
+    </div>
   );
 }
 
@@ -147,6 +179,7 @@ export {
   DialogDescription,
   DialogFooter,
   DialogHeader,
+  DialogImage,
   DialogOverlay,
   DialogPortal,
   DialogTitle,

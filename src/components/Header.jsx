@@ -6,7 +6,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { IconSelect } from "@/components/ui/select";
-import { Menu, SlidersHorizontal } from "lucide-react";
+import { Menu, SlidersHorizontal, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import PreferencesModal from "@/components/PreferencesModal";
 
@@ -21,6 +21,7 @@ export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false);
+  const [isBetaBannerVisible, setIsBetaBannerVisible] = useState(true);
   const [scrollState, setScrollState] = useState({
     visible: true,
     scrolled: false,
@@ -82,12 +83,24 @@ export default function Header() {
 
   return (
     <>
-      <div
-        dir="rtl"
-        className="-mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-2 bg-primary text-primary-foreground text-center text-xs sm:text-sm font-medium font-cairo"
-      >
-        المنصة قيد التطوير ولم تُطلق رسمياً بعد.
-      </div>
+      {pathname === "/" && isBetaBannerVisible && (
+        <div
+          dir="rtl"
+          className="relative -mx-4 sm:-mx-6 lg:-mx-8 px-12 py-2 bg-primary text-primary-foreground flex items-center justify-center text-center text-xs sm:text-sm font-medium gap-4"
+        >
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-xs"
+            onClick={() => setIsBetaBannerVisible(false)}
+            aria-label="إغلاق الإشعار"
+            className="text-primary-foreground hover:bg-primary-foreground/15 hover:text-primary-foreground"
+            >
+            <X />
+          </Button>
+          <span>المنصة قيد التطوير ولم تُطلق رسمياً بعد.</span>
+        </div>
+      )}
       <header
       dir="rtl"
       className={cn(
